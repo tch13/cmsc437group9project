@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang = en>
+<head>
+    </style>
+    <meta charset="utf-8">   
+    <meta name="viewport" content="width=device-width, initial-scale=1">   
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">   
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>  
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> 
+    <script src="https://g200kg.github.io/input-knobs/input-knobs.js"></script>
+
+    <style>
+        .btn {
+            margin-bottom:5px;
+        }
+
+        .col-sm-5 {
+            border-style: solid;
+            border-color: black;
+            border-width: 2px 1px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm navbar-dark" id="nBar" style="background-color: black;">
+        <!--navbar-toggler defines the styles for the button-->
+        <!--data-toggle="collapse" defines the behavior of button-->
+        <!--#collapsibleNavbar specifies the element that expands/collapses-->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <!--"collapse" means once loaded should be collapsed-->
+        <!--"navbar-collapse" says to render when is expanded-->
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <!--"navbar-nav" removes the bullets from list items-->
+          <ul class="navbar-nav">
+            <li class="nav-item" >
+                <a class="nav-link active" href="#" id="nBar">LOGIN</a>
+              </li>
+            <li class="nav-item">
+              <a class="nav-link" href="vitals.htm" id="nBar">VITALS</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" id="nBar">RECORDS</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" id="nBar">X-RAYS</a>
+            </li>    
+            <li class="nav-item">
+                <a class="nav-link" href="controlsPage.html" id="nBar">CONTROLS</a>
+              </li>   
+          </ul>
+        </div>  
+    </nav>
+    <div class="row" style="padding:0.5%;">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-5" style="border-width: 2px 1px 2px 2px ">
+            <form>
+                <h6> Existing User Login </h6>
+                <div class="form-group">
+                    <label for="currentUserName">Username</label>
+                    <input type="text" class="form-control form-control-sm" id="currentUserName">
+                </div>
+                <div class="form-group"> 
+                    <label for="currentUserPassword">Password</label>
+                    <input type="password" class="form-control form-control-sm" id="currentUserPassword">
+                </div>
+            </form>
+            <button type="button" class="btn btn-primary">Log in</button>
+        </div>
+        <div class="col-sm-5" style="border: 2px solid black;">
+            <form>
+                <h6> Add/Remove Patients</h6>
+                <div class="form-group">
+                    <label for="newPatientName">Patient Name</label>
+                    <input type="text" class="form-control form-control-sm" id="newPatientName" placeholder="John Smith">
+                </div>
+                <div class="form-group"> 
+                    <label for="newUserPassword">Patient Birthdate (MM/DD/YYYY)</label>
+                    <input type="text" class="form-control form-control-sm" id="newUserPassword" placeholder="04/01/1985">
+                </div>
+            </form>
+            <div class="btn-block">
+                <button type="button" class="btn btn-primary">Add Patient</button>
+                <button type="button" class="btn btn-danger">Remove Patient</button>
+            </div>
+        </div>
+        <div class="col-sm-1"></div>
+    </div>
+    <div class="row" style="padding:0.5%;">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-5" style="border-width: 2px 1px 2px 2px">
+            <form>
+                <h6> Add/Remove Users <span style="color:red">(SUPERUSER ONLY)</span></h6>
+                <div class="form-group">
+                    <label for="newUserName">Username</label>
+                    <input type="text" class="form-control form-control-sm" id="newUserName">
+                  </div>
+                  <div class="form-group"> 
+                      <label for="newUserPassword">Password</label>
+                      <input type="password" class="form-control form-control-sm" id="newUserPassword">
+                  </div>
+                  <div class="form-group"> 
+                    <label for="newUserLevel">User Level ('S', 'P', or 'N')</label>
+                    <input type="password" class="form-control form-control-sm" id="newUserLevel">
+                </div>
+            </form>
+            <div class="btn-block">
+                <button type="button" class="btn btn-primary">Add User</button>
+                <button type="button" class="btn btn-danger">Remove User</button>
+            </div>
+        </div>
+        <div class="col-sm-5" style="border: 2px solid black;">
+            <h6>Clear Database <span style="color:red;">(SUPERUSER ONLY)</span></h6>
+            <br>
+            <button type="button" class="btn btn-danger">Clear Entire Database</button>
+        </div>
+        <div class="col-sm-1"></div>
+    </div>
+</body>
