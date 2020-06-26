@@ -21,9 +21,6 @@ Key HTML IDs: "userName": User's username to uniquely identify their system acco
               "patientName": Patient's name in the format FirstNameLastNameBirthDate
                     - Example: John Smith was born on August 10th, 2001. His patientName is JohnSmith08102001
               "password": The user's password to their account
-              "warningMessage": A variable to which error messages should be printed
-              "firstName": A User's first name
-              "lastName": A user's last name
               "userLevel": User's level of authority ("S", "P", "N")
               "ECG", "SpO2", "CO2", "BP", "P": Different variables for the different vital signs to be added
               "addRecords": Records to be added
@@ -42,22 +39,25 @@ var userDB = {};
 // Current user (doctor)
 var currentUser = "";
 var superUser = "admin";
+// loggedIn Boolean variable
+var loggedIn = false;
 
 // For Evan to implement
 function login(){
     // Create a super user if there is not already one (can only clear DB and add/remove user accounts)
     if (userDB[superUser] == null){
-        userDB[superUser] =  {PASSWORD:"password", FIRSTNAME:"", LASTNAME:"", USERLEVEL:"S"}
+        userDB[superUser] =  {PASSWORD:"password", USERLEVEL:"S"}
     }
     // Get all necessary elements to create a user account from the document
     var userName = document.getElementById("userName").value;
     var password = document.getElementById("password").value;
     if (userDB[userName] != null && userDB[userName].PASSWORD == password){
         currentUser = userName;
+        loggedIn = true;
     }
     else{
-        document.getElementById("warningMessage").innerHTML = userName + 
-        " does not exist or the username or password was misspelled";
+        alert("The user \"" + String(userName) +
+        "\" does not exist or the username or password was misspelled");
         return;
     }
 }
@@ -65,34 +65,56 @@ function login(){
 // Should perform the rest of its functionality through HTML
 // by taking the user back to the login screen
 function logout(){
+    // If user is not logged in, give error and return
+    if (loggedIn == false) {
+        alert("You are currently not logged in, please do so before performing any further actions");
+        return;
+    }
     currentUser = "";
+    loggedIn = false;
 }
 
 function addUser(){
+    // If user is not logged in, give error and return
+    if (loggedIn == false) {
+        alert("You are currently not logged in, please do so before performing any further actions");
+        return;
+    }
     // If the user is not a super user, give a warning and don't remove user
     if (userDB[currentUser].USERLEVEL != "S"){
-        document.getElementById("warningMessage").innerHTML = currentUser + 
-        " is not of a valid authorization level for this action";
+        alert("The current user \"" + currentUser +
+        "\" is not of a valid S-tier authorization level for this action; " +
+        "Please login using the super user first (username:admin, password:password)");
         return;
     }
     // Get all necessary elements to create a user account from the document
     var userName = document.getElementById("userName").value;
     var password = document.getElementById("password").value;
-    var firstName = document.getElementById("firstName").value;
-    var lastName = document.getElementById("lastName").value;
     var userLevel = document.getElementById("userLevel").value;
+    var ul = String(userLevel);
+    // Check input to make sure the userLevel is correct
+    if (ul != "P" && ul != "N"){
+        alert("The provided user level was invalid (can only be \"P\"\"N\")");
+        return;
+    }
     // Add all information to the userDB stored under the new user's userName
-    userDB[userName] = {PASSWORD:password, FIRSTNAME:firstName, LASTNAME:lastName, USERLEVEL:userLevel};
+    userDB[userName] = {PASSWORD:password, USERLEVEL:userLevel};
     // Convert database to a JSON and store in localStorage
     var JSONDB = JSON.stringify(userDB);
     localStorage.setItem("localUserDB", JSONDB);
 }
 
 function removeUser(){
+    // If user is not logged in, give error and return
+    if (loggedIn == false) {
+        alert("You are currently not logged in, please do so before performing any further actions");
+        return;
+    }
     // If the user is not a super user, give a warning and don't remove user
     if (userDB[currentUser].USERLEVEL != "S"){
-        document.getElementById("warningMessage").innerHTML = currentUser + 
-        " is not of a valid authorization level for this action";
+        alert("The current user \"" + currentUser +
+        "\" is not of a valid S-tier authorization level for this action; " +
+        "Please login using the super user first (username:admin, password:password)");
         return;
     }
     // Get all necessary elements to remove a user account from the document
@@ -106,16 +128,22 @@ function removeUser(){
         localStorage.setItem("localUserDB", JSONDB);
     }
     else{
-        document.getElementById("warningMessage").innerHTML = userName + 
-        " does not exist or password was incorrect";
+        alert("The current user \"" + currentUser +
+        "\" does not exist or the username or password was misspelled")
     }
 }
 
 function addPatient(){
+    // If user is not logged in, give error and return
+    if (loggedIn == false) {
+        alert("You are currently not logged in, please do so before performing any further actions");
+        return;
+    }
     // If the user is not a physician or a nurse, give a warning and don't add patient
-    if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "N"){
-        document.getElementById("warningMessage").innerHTML = currentUser + 
-        " is not of a valid authorization level for this action";
+    if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "N" &&
+    userDB[currentUser].USERLEVEL != "S"){
+        alert("The current user \"" + currentUser +
+        "\" is not of a valid P or N-tier authorization level for this action");
         return;
     }
     // Get all necessary elements to create a patient account from the document
@@ -130,10 +158,16 @@ function addPatient(){
 }
 
 function removePatient(){
+    // If user is not logged in, give error and return
+    if (loggedIn == false) {
+        alert("You are currently not logged in, please do so before performing any further actions");
+        return;
+    }
     // If the user is not a physician or a nurse, give a warning and don't remove patient
-    if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "N"){
-        document.getElementById("warningMessage").innerHTML = currentUser + 
-        " is not of a valid authorization level for this action";
+    if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "N" &&
+    userDB[currentUser].USERLEVEL != "S"){
+        alert("The current user \"" + currentUser +
+        "\" is not of a valid P or N-tier authorization level for this action");
         return;
     }
     // Get all necessary elements to remove a patient account from the document
@@ -146,21 +180,29 @@ function removePatient(){
         localStorage.setItem("localPatientDB", JSONDB);
     }
     else{
-        document.getElementById("warningMessage").innerHTML = patientName + 
-        " does not exist or was spelled incorrectly";
+        alert("The patientName \"" + String(patientName) +
+        "\" does not exist or was misspelled\n\n" +
+        "Note: The patientName must be of the form FirstNameLastNameBirthDate, " +
+        "for example; JohnSmith09241995");
     }
 }
 
 // For Tommy to implement
 function addPatientVitals(){
+    // If user is not logged in, give error and return
+    if (loggedIn == false) {
+        alert("You are currently not logged in, please do so before performing any further actions");
+        return;
+    }
     // If the user is not a physician or a nurse, give a warning and don't add patient vitals
-    if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "N"){
-        document.getElementById("warningMessage").innerHTML = currentUser + 
-        " is not of a valid authorization level for this action";
+    if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "N" &&
+    userDB[currentUser].USERLEVEL != "S"){
+        alert("The current user \"" + currentUser +
+        "\" is not of a valid P or N-tier authorization level for this action");
         return;
     }
     // Get all required elements including ECG, SpO2, CO2, Blood pressure, and Pulse
-    var patientName = document.getElementById("patientName").value;
+    var patientName = document.getElementById("vitalsPatientName").value;
     var ECG = document.getElementById("ECG").value;
     var SpO2 = document.getElementById("SpO2").value;
     var CO2 = document.getElementById("CO2").value;
@@ -174,20 +216,27 @@ function addPatientVitals(){
         localStorage.setItem("localPatientDB", JSONDB);
     }
     else{
-        document.getElementById("warningMessage").innerHTML = patientName + 
-        " does not exist or was spelled incorrectly";
+        alert("The patientName \"" + String(patientName) +
+        "\" does not exist or was misspelled\n\n" +
+        "Note: The patientName must be of the form FirstNameLastNameBirthDate, " +
+        "for example; JohnSmith09241995");
     }
 }
 
 function addPatientRecords(){
+    // If user is not logged in, give error and return
+    if (loggedIn == false) {
+        alert("You are currently not logged in, please do so before performing any further actions");
+        return;
+    }
     // If the user is not a physician, give a warning and don't add patient record
-    if (userDB[currentUser].USERLEVEL != "P"){
-        document.getElementById("warningMessage").innerHTML = currentUser + 
-        " is not of a valid authorization level for this action";
+    if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "S"){
+        alert("The current user \"" + currentUser +
+        "\" is not of a valid P-tier authorization level for this action");
         return;
     }
     // Get all required elements
-    var patientName = document.getElementById("patientName").value;
+    var patientName = document.getElementById("recordsPatientName").value;
     var records = document.getElementById("addRecords").value;
     if (patientDB[patientName] != null){
         // Add records to the patientDB stored under the new patient's userName
@@ -197,20 +246,27 @@ function addPatientRecords(){
         localStorage.setItem("localPatientDB", JSONDB);
     }
     else{
-        document.getElementById("warningMessage").innerHTML = patientName + 
-        " does not exist or was spelled incorrectly";
+        alert("The patientName \"" + String(patientName) +
+        "\" does not exist or was misspelled\n\n" +
+        "Note: The patientName must be of the form FirstNameLastNameBirthDate, " +
+        "for example; JohnSmith09241995");
     }
 }
 
 function addPatientXrays(){
+    // If user is not logged in, give error and return
+    if (loggedIn == false) {
+        alert("You are currently not logged in, please do so before performing any further actions");
+        return;
+    }
     // If the user is not a physician, give a warning and don't add patient x-ray
-    if (userDB[currentUser].USERLEVEL != "P"){
-        document.getElementById("warningMessage").innerHTML = currentUser + 
-        " is not of a valid authorization level for this action";
+    if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "S"){
+        alert("The current user \"" + currentUser +
+        "\" is not of a valid P-tier authorization level for this action");
         return;
     }
     // Get all required elements
-    var patientName = document.getElementById("patientName").value;
+    var patientName = document.getElementById("xraysPatientName").value;
     var xrays = document.getElementById("addXrays").value;
     if (patientDB[patientName] != null){
         // Add all x-ray information to the patientDB stored under the new patient's userName
@@ -220,81 +276,115 @@ function addPatientXrays(){
         localStorage.setItem("localPatientDB", JSONDB);
     }
     else{
-        document.getElementById("warningMessage").innerHTML = patientName + 
-        " does not exist or was spelled incorrectly";
+        alert("The patientName \"" + String(patientName) +
+        "\" does not exist or was misspelled\n\n" +
+        "Note: The patientName must be of the form FirstNameLastNameBirthDate, " +
+        "for example; JohnSmith09241995");
     }
 }
 
 function retrievePatientVitals(){
+    // If user is not logged in, give error and return
+    if (loggedIn == false) {
+        alert("You are currently not logged in, please do so before performing any further actions");
+        return;
+    }
     // If the user is not a physician or a nurse, give a warning and don't retrieve patient vitals
-    if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "N"){
-        document.getElementById("warningMessage").innerHTML = currentUser + 
-        " is not of a valid authorization level for this action";
+    if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "N" &&
+    userDB[currentUser].USERLEVEL != "S"){
+        alert("The current user \"" + currentUser +
+        "\" is not of a valid P or N-tier authorization level for this action");
         return;
     }
     var JSONDB = localStorage.getItem("localPatientDB");
     var JSDB = JSON.parse(JSONDB);
-    var patientName = document.getElementById("patientName").value;
+    var patientName = document.getElementById("vitalsPatientName").value;
     if (JSDB[patientName] != null){
         // Retrieve all vital information from the patientDB stored under the patient's patientName
         document.getElementById("retrieveVitals").value = JSDB[patientName].VITALS;
     }
     else{
-        document.getElementById("warningMessage").innerHTML = patientName + 
-        " does not exist or was spelled incorrectly";
+        alert("The patientName \"" + String(patientName) +
+        "\" does not exist or was misspelled\n\n" +
+        "Note: The patientName must be of the form FirstNameLastNameBirthDate, " +
+        "for example; JohnSmith09241995");
     }
 }
 
 function retrievePatientRecords(){
+    // If user is not logged in, give error and return
+    if (loggedIn == false) {
+        alert("You are currently not logged in, please do so before performing any further actions");
+        return;
+    }
     // If the user is not a physician or a nurse, give a warning and don't retrieve patient records
-    if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "N"){
-        document.getElementById("warningMessage").innerHTML = currentUser + 
-        " is not of a valid authorization level for this action";
+    if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "N" &&
+    userDB[currentUser].USERLEVEL != "S"){
+        alert("The current user \"" + currentUser +
+        "\" is not of a valid P or N-tier authorization level for this action");
         return;
     }
     var JSONDB = localStorage.getItem("localPatientDB");
     var JSDB = JSON.parse(JSONDB);
-    var patientName = document.getElementById("patientName").value;
-    if (JSDB[patientName] != null){
+    var patientName = document.getElementById("recordsPatientName").value;
+    if (JSDB == null){
+        alert("The patient database has nothing in it");
+    }
+    else if (JSDB[patientName] != null){
         // Retrieve all medical records from the patientDB stored under the patient's patientName
         document.getElementById("retrieveRecords").value = JSDB[patientName].RECORDS;
     }
     else{
-        document.getElementById("warningMessage").innerHTML = patientName + 
-        " does not exist or was spelled incorrectly";
+        alert("The patientName \"" + String(patientName) +
+        "\" does not exist or was misspelled\n\n" +
+        "Note: The patientName must be of the form FirstNameLastNameBirthDate, " +
+        "for example; JohnSmith09241995");
     }
 }
 
 function retrievePatientXrays(){
+    // If user is not logged in, give error and return
+    if (loggedIn == false) {
+        alert("You are currently not logged in, please do so before performing any further actions");
+        return;
+    }
     // If the user is not a physician, give a warning and don't retrieve patient x-rays
-    if (userDB[currentUser].USERLEVEL != "P"){
-        document.getElementById("warningMessage").innerHTML = currentUser + 
-        " is not of a valid authorization level for this action";
+    if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "S"){
+        alert("The current user \"" + currentUser +
+        "\" is not of a valid P-tier authorization level for this action");
         return;
     }
     var JSONDB = localStorage.getItem("localPatientDB");
     var JSDB = JSON.parse(JSONDB);
-    var patientName = document.getElementById("patientName").value;
+    var patientName = document.getElementById("xraysPatientName").value;
     if (JSDB[patientName] != null){
         // Retrieve all x-ray information from the patientDB stored under the patient's patientName
         document.getElementById("retrieveXrays").value = JSDB[patientName].XRAYS;
     }
     else{
-        document.getElementById("warningMessage").innerHTML = patientName + 
-        " does not exist or was spelled incorrectly";
+        alert("The patientName \"" + String(patientName) +
+        "\" does not exist or was misspelled\n\n" +
+        "Note: The patientName must be of the form FirstNameLastNameBirthDate, " +
+        "for example; JohnSmith09241995");
     }
 }
 
 // For Tommy to implement
 function removePatientVitals(){
+    // If user is not logged in, give error and return
+    if (loggedIn == false) {
+        alert("You are currently not logged in, please do so before performing any further actions");
+        return;
+    }
     // If the user is not a physician or a nurse, give a warning and don't remove patient vitals
-    if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "N"){
-        document.getElementById("warningMessage").innerHTML = currentUser + 
-        " is not of a valid authorization level for this action";
+    if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "N" &&
+    userDB[currentUser].USERLEVEL != "S"){
+        alert("The current user \"" + currentUser +
+        "\" is not of a valid P or N-tier authorization level for this action");
         return;
     }
     // Get all necessary elements to remove patient vitals from the document
-    var patientName = document.getElementById("patientName").value;
+    var patientName = document.getElementById("vitalsPatientName").value;
     var JSONDB = localStorage.getItem("localPatientDB");
     var JSDB = JSON.parse(JSONDB);
     // Remove vitals information from patient's database entry
@@ -305,44 +395,58 @@ function removePatientVitals(){
         localStorage.setItem("localPatientDB", JSONDB);
     }
     else{
-        document.getElementById("warningMessage").innerHTML = patientName + 
-        " does not exist or was spelled incorrectly";
+        alert("The patientName \"" + String(patientName) +
+        "\" does not exist or was misspelled\n\n" +
+        "Note: The patientName must be of the form FirstNameLastNameBirthDate, " +
+        "for example; JohnSmith09241995");
     }
 }
 
 function removePatientRecords(){
+    // If user is not logged in, give error and return
+    if (loggedIn == false) {
+        alert("You are currently not logged in, please do so before performing any further actions");
+        return;
+    }
     // If the user is not a physician, give a warning and don't remove patient records
-    if (userDB[currentUser].USERLEVEL != "P"){
-        document.getElementById("warningMessage").innerHTML = currentUser + 
-        " is not of a valid authorization level for this action";
+    if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "S"){
+        alert("The current user \"" + currentUser +
+        "\" is not of a valid P-tier authorization level for this action");
         return;
     }
     // Get all necessary elements to remove patient records from the document
-    var patientName = document.getElementById("patientName").value;
+    var patientName = document.getElementById("recordsPatientName").value;
     var JSONDB = localStorage.getItem("localPatientDB");
     var JSDB = JSON.parse(JSONDB);
     // Remove records from patient's database entry
     if(JSDB[patientName] != null && JSDB[patientName].RECORDS != null){
         //delete JSDB[userName].RECORDS;
-        JSDB[userName].RECORDS = {};
+        JSDB[patientName].RECORDS = {};
         JSONDB = JSON.stringify(JSDB);
         localStorage.setItem("localPatientDB", JSONDB);
     }
     else{
-        document.getElementById("warningMessage").innerHTML = patientName + 
-        " does not exist or was spelled incorrectly";
+        alert("The patientName \"" + String(patientName) +
+        "\" does not exist or was misspelled\n\n" +
+        "Note: The patientName must be of the form FirstNameLastNameBirthDate, " +
+        "for example; JohnSmith09241995");
     }
 }
 
 function removePatientXrays(){
+    // If user is not logged in, give error and return
+    if (loggedIn == false) {
+        alert("You are currently not logged in, please do so before performing any further actions");
+        return;
+    }
     // If the user is not a physician, give a warning and don't remove patient x-rays
-    if (userDB[currentUser].USERLEVEL != "P"){
-        document.getElementById("warningMessage").innerHTML = currentUser + 
-        " is not of a valid authorization level for this action";
+    if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "S"){
+        alert("The current user \"" + currentUser +
+        "\" is not of a valid P-tier authorization level for this action");
         return;
     }
     // Get all necessary elements to remove patient x-rays from the document
-    var patientName = document.getElementById("patientName").value;
+    var patientName = document.getElementById("xraysPatientName").value;
     var JSONDB = localStorage.getItem("localPatientDB");
     var JSDB = JSON.parse(JSONDB);
     // Remove x-ray information from patient's database entry
@@ -353,36 +457,56 @@ function removePatientXrays(){
         localStorage.setItem("localPatientDB", JSONDB);
     }
     else{
-        document.getElementById("warningMessage").innerHTML = patientName + 
-        " does not exist or was spelled incorrectly";
+        alert("The patientName \"" + String(patientName) +
+        "\" does not exist or was misspelled\n\n" +
+        "Note: The patientName must be of the form FirstNameLastNameBirthDate, " +
+        "for example; JohnSmith09241995");
     }
 }
 
 // For Evan to implement
 function changeVentilatorSettings(){
+    // If user is not logged in, give error and return
+    if (loggedIn == false) {
+        alert("You are currently not logged in, please do so before performing any further actions");
+        return;
+    }
     // If the user is not a physician or a nurse, give a warning and don't change settings
-    if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "N"){
-        document.getElementById("warningMessage").innerHTML = currentUser + 
-        " is not of a valid authorization level for this action";
+    if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "N" &&
+    userDB[currentUser].USERLEVEL != "S"){
+        alert("The current user \"" + currentUser +
+        "\" is not of a valid P or N-tier authorization level for this action");
         return;
     }
 }
 
 // For Evan to implement
 function changeInfusionPumpSettings(){
+    // If user is not logged in, give error and return
+    if (loggedIn == false) {
+        alert("You are currently not logged in, please do so before performing any further actions");
+        return;
+    }
     // If the user is not a physician or a nurse, give a warning and don't change settings
-    if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "N"){
-        document.getElementById("warningMessage").innerHTML = currentUser + 
-        " is not of a valid authorization level for this action";
+    if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "N" &&
+    userDB[currentUser].USERLEVEL != "S"){
+        alert("The current user \"" + currentUser +
+        "\" is not of a valid P or N-tier authorization level for this action");
         return;
     }
 }
 
 function clearEntireDB(){
+    // If user is not logged in, give error and return
+    if (loggedIn == false) {
+        alert("You are currently not logged in, please do so before performing any further actions");
+        return;
+    }
     // If the user is not a super user, give a warning and don't clear DB
     if (userDB[currentUser].USERLEVEL != "S"){
-        document.getElementById("warningMessage").innerHTML = currentUser + 
-        " is not of a valid authorization level for this action";
+        alert("The current user \"" + currentUser +
+        "\" is not of a valid S-tier authorization level for this action; " +
+        "Please login using the super user first (username:admin, password:password)");
         return;
     }
     localStorage.clear();

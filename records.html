@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>RECORDS</title>
+        <style>
+            #inputs{
+                text-align: center;
+                vertical-align: middle;
+            }
+            #nBar{
+                background-color: black;
+            }
+        </style>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        
+        <!-- Our main JavaScript and CSS files -->
+        <link rel="stylesheet" href="cmsc437group9project.css">
+        <!-- <script src="cmsc437group9project.js"></script> -->
+    </head>
+    <body>
+
+        <nav class="navbar navbar-expand-sm navbar-dark" id="nBar">
+            <!--navbar-toggler defines the styles for the button-->
+            <!--data-toggle="collapse" defines the behavior of button-->
+            <!--#collapsibleNavbar specifies the element that expands/collapses-->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <!--"collapse" means once loaded should be collapsed-->
+            <!--"navbar-collapse" says to render when is expanded-->
+            <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                <!--"navbar-nav" removes the bullets from list items-->
+              <ul class="navbar-nav">
+                <li class="nav-item" >
+                    <a class="nav-link" href="nbar.htm" id="nBar">LOGIN</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link active" href="vitals.htm" id="nBar">VITALS</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="records.html" id="nBar">RECORDS</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="xrays.html" id="nBar">X-RAYS</a>
+                </li>    
+                <li class="nav-item">
+                    <a class="nav-link" href="controlsPage.html" id="nBar">CONTROLS</a>
+                  </li>   
+              </ul>
+            </div>  
+        </nav>
+        
+        <h1> PATIENT RECORDS </h1>
+        <br><br><br>
+        <div class="container">
+            <!-- Temporary login method -->
+            <div class="row" >
+                <div class="col-sm-4">UserName:
+                    <input type="text" id="userName">
+                </div>
+                <div class="col-sm-4">Password:
+                    <input type="text" id="password">
+                </div>
+                <div class="col-sm-4">
+                    <button onclick="login()">Login</button>
+                </div>
+                <p id="loginWM"></p>
+            </div>
+            <br><br>
+            <div class="row" >
+                <div class="col-sm-6">UserLevel:
+                    <input type="text" id="userLevel">
+                </div>
+                <div class="col-sm-6">
+                    <button onclick="addUser()">Add User</button>
+                </div>
+                <p id="addUserWM"></p>
+            </div>
+            <br><br>
+            <div class="row" >
+                <div class="col">PatientName:
+                    <input type="text" id="patientName">
+                    <button onclick="addPatient()">Add Patient</button>
+                </div>
+                <p id="addUserWM"></p>
+            </div>
+            <br><br>
+            <!-- Record functions -->
+            <div class="row" >
+                <div class="col-sm-3">PatientName:
+                    <input type="text" id="recordsPatientName">
+                </div>
+                <div class="col-sm-3">
+                    <button onclick="retrievePatientRecords()">Search Database</button>
+                    <p id="retrieveRecords"></p>
+                </div>
+                <div class="col-sm-3">Record name:
+                    <input type="text" id="addRecords">
+                    <button onclick="addPatientRecords()">Add Record</button>
+                </div>
+                <div class="col-sm-3">
+                    <button onclick="removePatientRecords()">Remove All Records</button>
+                </div>
+                <p id="retrievePatientRecordsWM"></p>
+            </div>
+            <br><br>
+        </div>
+        <script src="cmsc437group9project.js"></script>
+    </body>
+</html>
