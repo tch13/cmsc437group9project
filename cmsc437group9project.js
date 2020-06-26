@@ -90,9 +90,9 @@ function addUser(){
         return;
     }
     // Get all necessary elements to create a user account from the document
-    var userName = document.getElementById("userName").value;
-    var password = document.getElementById("password").value;
-    var userLevel = document.getElementById("userLevel").value;
+    var userName = document.getElementById("addOrRemoveUserName").value;
+    var password = document.getElementById("addOrRemovePassword").value;
+    var userLevel = document.getElementById("addOrRemoveUserLevel").value;
     var ul = String(userLevel);
     // Check input to make sure the userLevel is correct
     if (ul != "P" && ul != "N"){
@@ -104,6 +104,9 @@ function addUser(){
     // Convert database to a JSON and store in localStorage
     var JSONDB = JSON.stringify(userDB);
     localStorage.setItem("localUserDB", JSONDB);
+    document.getElementById("addOrRemoveUserName").value = "";
+    document.getElementById("addOrRemovePassword").value = "";
+    document.getElementById("addOrRemoveUserLevel").value = "";
 }
 
 function removeUser(){
@@ -120,14 +123,17 @@ function removeUser(){
         return;
     }
     // Get all necessary elements to remove a user account from the document
-    var userName = document.getElementById("userName").value;
-    var password = document.getElementById("password").value;
+    var userName = document.getElementById("addOrRemoveUserName").value;
+    var password = document.getElementById("addOrRemovePassword").value;
     var JSONDB = localStorage.getItem("localUserDB");
     var JSDB = JSON.parse(JSONDB);
     if(JSDB[userName] != null && JSDB[userName].PASSWORD == password){
         delete JSDB[userName];
         JSONDB = JSON.stringify(JSDB);
         localStorage.setItem("localUserDB", JSONDB);
+        document.getElementById("addOrRemoveUserName").value = "";
+        document.getElementById("addOrRemovePassword").value = "";
+        document.getElementById("addOrRemoveUserLevel").value = "";
     }
     else{
         alert("The current user \"" + currentUser +
@@ -149,14 +155,17 @@ function addPatient(){
         return;
     }
     // Get all necessary elements to create a patient account from the document
-    // NOTE: patientName should be of the form FirstNameLastNameBirthDate
-    // Example patientName: JohnSmith01234567
-    var patientName = document.getElementById("patientName").value;
+    // NOTE: patientName should be of the form FirstName LastName BirthDate
+    var patientFN = document.getElementById("patientFN").value;
+    var patientDOB = document.getElementById("patientDOB").value;
+    var patientName = String(patientFN) + String(patientDOB);
     // Add all information to the patientDB stored under the new patient's userName
     patientDB[patientName] = {VITALS:{}, RECORDS:{}, XRAYS:{}};
     // Convert database to a JSON and store in localStorage
     var JSONDB = JSON.stringify(patientDB);
     localStorage.setItem("localPatientDB", JSONDB);
+    document.getElementById("patientFN").value = "";
+    document.getElementById("patientDOB").value = "";
 }
 
 function removePatient(){
@@ -172,14 +181,19 @@ function removePatient(){
         "\" is not of a valid P or N-tier authorization level for this action");
         return;
     }
-    // Get all necessary elements to remove a patient account from the document
-    var patientName = document.getElementById("patientName").value;
+    // Get all necessary elements
+    // NOTE: patientName should be of the form FirstName LastName BirthDate
+    var patientFN = document.getElementById("patientFN").value;
+    var patientDOB = document.getElementById("patientDOB").value;
+    var patientName = String(patientFN) + String(patientDOB);
     var JSONDB = localStorage.getItem("localPatientDB");
     var JSDB = JSON.parse(JSONDB);
     if(JSDB[patientName] != null){
         delete JSDB[userName];
         JSONDB = JSON.stringify(JSDB);
         localStorage.setItem("localPatientDB", JSONDB);
+        document.getElementById("patientFN").value = "";
+        document.getElementById("patientDOB").value = "";
     }
     else{
         alert("The patientName \"" + String(patientName) +
@@ -203,8 +217,11 @@ function addPatientVitals(){
         "\" is not of a valid P or N-tier authorization level for this action");
         return;
     }
-    // Get all required elements including ECG, SpO2, CO2, Blood pressure, and Pulse
-    var patientName = document.getElementById("vitalsPatientName").value;
+    // Get all necessary elements
+    // NOTE: patientName should be of the form FirstName LastName BirthDate
+    var patientFN = document.getElementById("vitalsPatientFN").value;
+    var patientDOB = document.getElementById("vitalsPatientDOB").value;
+    var patientName = String(patientFN) + String(patientDOB);
     var ECG = document.getElementById("ECG").value;
     var SpO2 = document.getElementById("SpO2").value;
     var CO2 = document.getElementById("CO2").value;
@@ -225,8 +242,8 @@ function addPatientVitals(){
     else{
         alert("The patientName \"" + String(patientName) +
         "\" does not exist or was misspelled\n\n" +
-        "Note: The patientName must be of the form FirstNameLastNameBirthDate, " +
-        "for example; JohnSmith09241995");
+        "Note: The patientName must be of the form FirstName LastName BirthDate, " +
+        "for example; John Smith 09/24/1995");
     }
 }
 
@@ -242,8 +259,11 @@ function addPatientRecords(){
         "\" is not of a valid P-tier authorization level for this action");
         return;
     }
-    // Get all required elements
-    var patientName = document.getElementById("recordsPatientName").value;
+    // Get all necessary elements
+    // NOTE: patientName should be of the form FirstName LastName BirthDate
+    var patientFN = document.getElementById("recordsPatientFN").value;
+    var patientDOB = document.getElementById("recordsPatientDOB").value;
+    var patientName = String(patientFN) + String(patientDOB);
     var recordName = document.getElementById("recordName").value;
     var recordDate = document.getElementById("recordDate").value;
     var recordToAdd = document.getElementById("recordToAdd").value;
@@ -260,8 +280,8 @@ function addPatientRecords(){
     else{
         alert("The patientName \"" + String(patientName) +
         "\" does not exist or was misspelled\n\n" +
-        "Note: The patientName must be of the form FirstNameLastNameBirthDate, " +
-        "for example; JohnSmith09241995");
+        "Note: The patientName must be of the form FirstName LastName BirthDate, " +
+        "for example; John Smith 09/24/1995");
     }
 }
 
@@ -277,8 +297,11 @@ function addPatientXrays(){
         "\" is not of a valid P-tier authorization level for this action");
         return;
     }
-    // Get all required elements
-    var patientName = document.getElementById("xraysPatientName").value;
+    // Get all necessary elements
+    // NOTE: patientName should be of the form FirstName LastName BirthDate
+    var patientFN = document.getElementById("xraysPatientFN").value;
+    var patientDOB = document.getElementById("xraysPatientDOB").value;
+    var patientName = String(patientFN) + String(patientDOB);
     var xrays = document.getElementById("addXrays").value;
     if (patientDB[patientName] != null){
         // Add all x-ray information to the patientDB stored under the new patient's userName
@@ -291,8 +314,8 @@ function addPatientXrays(){
     else{
         alert("The patientName \"" + String(patientName) +
         "\" does not exist or was misspelled\n\n" +
-        "Note: The patientName must be of the form FirstNameLastNameBirthDate, " +
-        "for example; JohnSmith09241995");
+        "Note: The patientName must be of the form FirstName LastName BirthDate, " +
+        "for example; John Smith 09/24/1995");
     }
 }
 
@@ -311,7 +334,11 @@ function retrievePatientVitals(){
     }
     var JSONDB = localStorage.getItem("localPatientDB");
     var JSDB = JSON.parse(JSONDB);
-    var patientName = document.getElementById("vitalsPatientName").value;
+    // Get all necessary elements
+    // NOTE: patientName should be of the form FirstName LastName BirthDate
+    var patientFN = document.getElementById("vitalsPatientFN").value;
+    var patientDOB = document.getElementById("vitalsPatientDOB").value;
+    var patientName = String(patientFN) + String(patientDOB);
     if (JSDB == null){
         alert("The patient database has nothing in it");
     }
@@ -323,8 +350,8 @@ function retrievePatientVitals(){
     else{
         alert("The patientName \"" + String(patientName) +
         "\" does not exist or was misspelled\n\n" +
-        "Note: The patientName must be of the form FirstNameLastNameBirthDate, " +
-        "for example; JohnSmith09241995");
+        "Note: The patientName must be of the form FirstName LastName BirthDate, " +
+        "for example; John Smith 09/24/1995");
     }
 }
 
@@ -343,7 +370,11 @@ function retrievePatientRecords(){
     }
     var JSONDB = localStorage.getItem("localPatientDB");
     var JSDB = JSON.parse(JSONDB);
-    var patientName = document.getElementById("recordsPatientName").value;
+    // Get all necessary elements
+    // NOTE: patientName should be of the form FirstName LastName BirthDate
+    var patientFN = document.getElementById("recordsPatientFN").value;
+    var patientDOB = document.getElementById("recordsPatientDOB").value;
+    var patientName = String(patientFN) + String(patientDOB);
     if (JSDB == null){
         alert("The patient database has nothing in it");
     }
@@ -365,8 +396,8 @@ function retrievePatientRecords(){
     else{
         alert("The patientName \"" + String(patientName) +
         "\" does not exist or was misspelled\n\n" +
-        "Note: The patientName must be of the form FirstNameLastNameBirthDate, " +
-        "for example; JohnSmith09241995");
+        "Note: The patientName must be of the form FirstName LastName BirthDate, " +
+        "for example; John Smith 09/24/1995");
     }
 }
 
@@ -384,7 +415,11 @@ function retrievePatientXrays(){
     }
     var JSONDB = localStorage.getItem("localPatientDB");
     var JSDB = JSON.parse(JSONDB);
-    var patientName = document.getElementById("xraysPatientName").value;
+    // Get all necessary elements
+    // NOTE: patientName should be of the form FirstName LastName BirthDate
+    var patientFN = document.getElementById("xraysPatientFN").value;
+    var patientDOB = document.getElementById("xraysPatientDOB").value;
+    var patientName = String(patientFN) + String(patientDOB);
     if (JSDB == null){
         alert("The patient database has nothing in it");
     }
@@ -396,8 +431,8 @@ function retrievePatientXrays(){
     else{
         alert("The patientName \"" + String(patientName) +
         "\" does not exist or was misspelled\n\n" +
-        "Note: The patientName must be of the form FirstNameLastNameBirthDate, " +
-        "for example; JohnSmith09241995");
+        "Note: The patientName must be of the form FirstName LastName BirthDate, " +
+        "for example; John Smith 09/24/1995");
     }
 }
 
@@ -415,8 +450,11 @@ function removePatientVitals(){
         "\" is not of a valid P or N-tier authorization level for this action");
         return;
     }
-    // Get all necessary elements to remove patient vitals from the document
-    var patientName = document.getElementById("vitalsPatientName").value;
+    // Get all necessary elements
+    // NOTE: patientName should be of the form FirstName LastName BirthDate
+    var patientFN = document.getElementById("vitalsPatientFN").value;
+    var patientDOB = document.getElementById("vitalsPatientDOB").value;
+    var patientName = String(patientFN) + String(patientDOB);
     var JSONDB = localStorage.getItem("localPatientDB");
     var JSDB = JSON.parse(JSONDB);
     if (JSDB == null){
@@ -432,8 +470,8 @@ function removePatientVitals(){
     else{
         alert("The patientName \"" + String(patientName) +
         "\" does not exist or was misspelled\n\n" +
-        "Note: The patientName must be of the form FirstNameLastNameBirthDate, " +
-        "for example; JohnSmith09241995");
+        "Note: The patientName must be of the form FirstName LastName BirthDate, " +
+        "for example; John Smith 09/24/1995");
     }
 }
 
@@ -449,8 +487,11 @@ function removePatientRecords(){
         "\" is not of a valid P-tier authorization level for this action");
         return;
     }
-    // Get all necessary elements to remove patient records from the document
-    var patientName = document.getElementById("recordsPatientName").value;
+    // Get all necessary elements
+    // NOTE: patientName should be of the form FirstName LastName BirthDate
+    var patientFN = document.getElementById("recordsPatientFN").value;
+    var patientDOB = document.getElementById("recordsPatientDOB").value;
+    var patientName = String(patientFN) + String(patientDOB);
     var JSONDB = localStorage.getItem("localPatientDB");
     var JSDB = JSON.parse(JSONDB);
     if (JSDB == null){
@@ -466,8 +507,8 @@ function removePatientRecords(){
     else{
         alert("The patientName \"" + String(patientName) +
         "\" does not exist or was misspelled\n\n" +
-        "Note: The patientName must be of the form FirstNameLastNameBirthDate, " +
-        "for example; JohnSmith09241995");
+        "Note: The patientName must be of the form FirstName LastName BirthDate, " +
+        "for example; John Smith 09/24/1995");
     }
 }
 
@@ -483,8 +524,11 @@ function removePatientXrays(){
         "\" is not of a valid P-tier authorization level for this action");
         return;
     }
-    // Get all necessary elements to remove patient x-rays from the document
-    var patientName = document.getElementById("xraysPatientName").value;
+    // Get all necessary elements
+    // NOTE: patientName should be of the form FirstName LastName BirthDate
+    var patientFN = document.getElementById("xraysPatientFN").value;
+    var patientDOB = document.getElementById("xraysPatientDOB").value;
+    var patientName = String(patientFN) + String(patientDOB);
     var JSONDB = localStorage.getItem("localPatientDB");
     var JSDB = JSON.parse(JSONDB);
     if (JSDB == null){
@@ -500,8 +544,8 @@ function removePatientXrays(){
     else{
         alert("The patientName \"" + String(patientName) +
         "\" does not exist or was misspelled\n\n" +
-        "Note: The patientName must be of the form FirstNameLastNameBirthDate, " +
-        "for example; JohnSmith09241995");
+        "Note: The patientName must be of the form FirstName LastName BirthDate, " +
+        "for example; John Smith 09/24/1995");
     }
 }
 
