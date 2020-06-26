@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>VITALS</title>
+        <style>
+            #inputs{
+                
+                text-align: center;
+                vertical-align: middle;
+                
+
+
+            }
+            #nBar{
+                background-color: black;
+
+
+            }
+
+
+        </style>
+
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        
+        <!-- Our main JavaScript and CSS files -->
+        <link rel="stylesheet" href="cmsc437group9project.css">
+        <script src="cmsc437group9project.js"></script>
+    </head>
+    <body>
+
+        <nav class="navbar navbar-expand-sm navbar-dark" id="nBar">
+            <!--navbar-toggler defines the styles for the button-->
+            <!--data-toggle="collapse" defines the behavior of button-->
+            <!--#collapsibleNavbar specifies the element that expands/collapses-->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <!--"collapse" means once loaded should be collapsed-->
+            <!--"navbar-collapse" says to render when is expanded-->
+            <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                <!--"navbar-nav" removes the bullets from list items-->
+              <ul class="navbar-nav">
+                <li class="nav-item" >
+                    <a class="nav-link" href="nbar.htm" id="nBar">LOGIN</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link active" href="vitals.htm" id="nBar">VITALS</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#" id="nBar">RECORDS</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#" id="nBar">X-RAYS</a>
+                </li>    
+                <li class="nav-item">
+                    <a class="nav-link" href="#" id="nBar">CONTROLS</a>
+                  </li>   
+              </ul>
+            </div>  
+        </nav>
+        
+        <h1> PATIENT NAME   </h1>
+        <br><br><br>
+        <div class="container">
+            <div class="row justify-content-center" >
+                <div class="col align-items-center">
+                    <p><b>SPO2:   </b>   </p>
+                </div>
+                <div class="col align-items-center">
+                    <p><b>BP:   </b>   </p>
+                </div>
+            </div>
+            <br><br><br>
+
+            <div class="row justify-content-center" >
+                <div class="col align-items-center">
+                    <p><b>HR:   </b></p>
+                </div>
+                <div class="col align-items-center">
+                    <p><b>CO2:   </b>   </p>
+                </div>
+            </div>
+
+            <br><br><br>
+            
+            <div class="row justify-content-center">
+                <div class="col align-items-center" id="inputs">
+                    <p class="button-area"><button id="submit_button" onclick="addPatientVitals()">Aprove</button></p>
+                </div>
+                <div class="col align-items-center" id="inputs">
+                    <p class="button-area"><button id="submit_button" onclick="removePatientVitals()">Deny</button></p>
+                </div>
+            </div>
+
+
+            </div>
+
+        </div>
+
+        <script>
+            // For Tommy to implement
+        function addPatientVitals(){
+            // If the user is not a physician or a nurse, give a warning and don't add patient vitals
+            if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "N"){
+                document.getElementById("warningMessage").innerHTML = currentUser + 
+                " is not of a valid authorization level for this action";
+                return;
+            }
+             // Get all required elements including ECG, SpO2, CO2, Blood pressure, and Pulse
+            var patientName = document.getElementById("patientName").value;
+            var ECG = document.getElementById("ECG").value;
+            var SpO2 = document.getElementById("SpO2").value;
+            var CO2 = document.getElementById("CO2").value;
+            var BP = document.getElementById("BP").value;
+            var P = document.getElementById("P").value;
+            if (patientDB[patientName] != null){
+            // Add all vitals information to the patientDB stored under the new patient's userName
+            patientDB[patientName].VITALS = {ECG, SpO2, CO2, BP, P};
+            // Convert database to a JSON and store in localStorage
+            var JSONDB = JSON.stringify(patientDB);
+            localStorage.setItem("localPatientDB", JSONDB);
+        }
+        else{
+            document.getElementById("warningMessage").innerHTML = patientName + 
+            " does not exist or was spelled incorrectly";
+        }
+    }
+
+
+    // For Tommy to implement
+        function removePatientVitals(){
+            // If the user is not a physician or a nurse, give a warning and don't remove patient vitals
+            if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "N"){
+                document.getElementById("warningMessage").innerHTML = currentUser + 
+                " is not of a valid authorization level for this action";
+                return;
+            }
+            // Get all necessary elements to remove patient vitals from the document
+            var patientName = document.getElementById("patientName").value;
+            var JSONDB = localStorage.getItem("localPatientDB");
+            var JSDB = JSON.parse(JSONDB);
+            // Remove vitals information from patient's database entry
+            if(JSDB[patientName] != null && JSDB[patientName].VITALS != null){
+                //delete JSDB[userName].VITALS;
+                JSDB[userName].VITALS = {};
+                JSONDB = JSON.stringify(JSDB);
+                localStorage.setItem("localPatientDB", JSONDB);
+            }
+            else{
+                document.getElementById("warningMessage").innerHTML = patientName + 
+                " does not exist or was spelled incorrectly";
+            }
+        }
+
+
+
+        </script>
+
+    </body>
+</html>
