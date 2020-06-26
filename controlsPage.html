@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang = en>
+<head>
+    <style>
+        .btn {
+            margin-bottom:5px;
+        }
+
+        #settings {
+            display:none;
+        }
+
+        #btnBox {
+            display:block;
+            padding:10%;
+            text-align:center;
+            
+        }
+    </style>
+    <meta charset="utf-8">   
+    <meta name="viewport" content="width=device-width, initial-scale=1">   
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">   
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>  
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> 
+    <script src="https://g200kg.github.io/input-knobs/input-knobs.js"></script>
+</head>
+<body>
+    <div id=btnBox>
+        <button type="button" class="btn btn-secondary" id="startBtn"> Change Medical Device Settings </button>
+        <p style="color:red; font-size:1.5em;"> NOTE: Device settings may ONLY be changed by physicians!</p>
+    </div> 
+    <div class="row" id="settings">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-5 text-center">
+            <h4>Ventilator Settings</h4>
+            <h5>Tidal Volume </h5>
+            <input type="range" class="input-knob" data-diameter="80">
+            <br>
+            <small> <b> 500 mL  &emsp; &emsp; &emsp; 600 mL </b></small>
+            <br>
+            <hr>
+            <h5> Pressure Support </h5>
+            <input type="range" class="input-knob" data-diameter="80">
+            <br>
+            <small> <b>5 cmH<sub>2</sub>O</sub> &emsp; &emsp; &ensp; 30 cmH<sub>2</sub>O </b></small>
+            <hr>
+        </div>
+
+        <div class="col-sm-5 text-center">
+            <h4>Infusion Pump Settings</h4>
+            <h5> Infusion Rate </h5>
+            <input type="range" class="input-knob" data-diameter="80">
+            <br>
+            <small><b>0 mL/hr  &emsp; &emsp; &emsp; 120 mL/hr </b></small>
+            <br>
+            <hr>
+            <div class="container text-center" id="timerPanel">
+                <h5> Infusion Timer </h5>
+                <br>
+                <div class="btn-block">
+                    <button type="button" class="btn btn-secondary" id="setBtn">SET</button>
+                    <button type="button" class="btn btn-secondary" id="startBtn_timer">START</button>
+                    <button type="button" class="btn btn-secondary" id="pauseBtn">PAUSE</button>
+                    <button type="button" class="btn btn-secondary" id="stopBtn">STOP</button>
+                </div>
+                <div class="container" style="border:5px solid red; text-align:center">
+                    <strong id="myTimer">00:00:00</strong>
+                </div>
+            </div>
+        </div>
+        <div class= "col-sm-1"></div>
+    </div>
+    <script>
+        $("#startBtn").click(function() {
+            $("#btnBox").css("display", "none");
+            $("#settings").css("display", "flex");
+        });  
+
+        $("#setBtn").click(function() {
+            var time = prompt("Please enter time in the form HH:MM:SS", "00:00:00");
+            var hours = time[0] + time[1];
+            var minutes = time[3] + time[4];
+            var seconds = time[6] + time[7];
+
+            var parsedHours = parseInt(hours, 10);
+            var parsedMinutes = parseInt(minutes, 10);
+            var parsedSeconds = parseInt(seconds, 10);
+
+            if(time[2] != ':' || time[5] != time[2]){
+                alert("Formatting error");
+            }
+
+
+            else if(isNaN(parsedHours) || isNaN(parsedMinutes) || isNaN(parsedSeconds)){
+                alert("Invalid time entered");
+            }
+
+            else{
+                $("#myTimer").html(time);
+            }
+        });
+
+        var timer;
+
+        $("#startBtn_timer").click(function() {
+            var timeString = $("#myTimer").html();
+            
+            var hours = timeString[0] + timeString[1];
+            var minutes = timeString[3] + timeString[4];
+            var seconds = timeString[6] + timeString[7];
+            
+            var newHours = parseInt(hours, 10);
+            var newMinutes = parseInt(minutes, 10);
+            var newSeconds = parseInt(seconds, 10);
+
+            timer = setInterval(function () {
+                newSeconds--;
+                if(newSeconds == -1){
+                    newSeconds = 59;
+                    newMinutes--;
+                    if(newMinutes == -1){
+                        newMinutes = 59;
+                        newHours--;
+                        if(newHours == -1){
+                            clearInterval(timer);
+                            alert("Infusion Pump Timer Expired")
+                            document.getElementById("myTimer").innerHTML = "00:00:00";
+                            return;
+                        }
+                    }
+                        
+                }
+
+                var stringHours = newHours.toString(10);
+                var stringMinutes = newMinutes.toString(10);
+                var stringSeconds = newSeconds.toString(10);
+                
+                var stringHours = newHours.toString();
+                if(stringHours.length == 1){
+                    stringHours = "0" + stringHours;
+                }
+
+                var stringMinutes = newMinutes.toString();
+                if(stringMinutes.length == 1){
+                    stringMinutes = "0" + stringMinutes;
+                }
+
+                var stringSeconds = newSeconds.toString();
+                if(stringSeconds.length == 1){
+                    stringSeconds = "0" + stringSeconds;
+                }
+
+                document.getElementById("myTimer").innerHTML = stringHours + ':' + stringMinutes + ':' + stringSeconds;
+            }, 1000);   
+
+        });
+
+        $("#pauseBtn").click(function(){
+            clearInterval(timer);
+        });
+
+        $("#stopBtn").click(function(){
+            clearInterval(timer);
+            $("#myTimer").html("00:00:00");
+        });
+
+    </script>
+</body>
+</html>
