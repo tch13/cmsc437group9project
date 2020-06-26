@@ -93,23 +93,29 @@
             <br><br>
             <!-- Record functions -->
             <div class="row" >
-                <div class="col-sm-3">PatientName:
+                <div class="col-sm-2">PatientName:
                     <input type="text" id="recordsPatientName">
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <button onclick="retrievePatientRecords()">Search Database</button>
-                    <p id="retrieveRecords"></p>
                 </div>
-                <div class="col-sm-3">Record name:
-                    <input type="text" id="addRecords">
+                <div class="col-sm-6">Record name:
+                    <input type="text" id="recordName">Date:
+                    <input type="text" id="recordDate">Record:
+                    <input type="text" id="recordToAdd">
                     <button onclick="addPatientRecords()">Add Record</button>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <button onclick="removePatientRecords()">Remove All Records</button>
                 </div>
                 <p id="retrievePatientRecordsWM"></p>
             </div>
             <br><br>
+            <div class="row">
+                <div class="col">
+                    <p id="retrieveRecords"></p>
+                </div>
+            </div>
         </div>
         <script src="cmsc437group9project.js"></script>
     </body>

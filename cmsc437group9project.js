@@ -5,8 +5,7 @@ Functions: login(), logout(), addUser(), removeUser(), addPatient(), removePatie
            retrievePatientXrays(), removePatientRecords(), removePatientVitals(), removePatientXrays(),
            changeVentilatorSettings(), changeInfusionPumpSettings(), clearEntireDB()
 
-Access notes: "S": Users identified with the "S" (super) userLevel will be able to access the login(), logout(),
-              addUser(), removeUser(), and clearEntireDB() functions
+Access notes: "S": Users identified with the "S" (super) userLevel will be able to access all functions
 
               "P": Users identified with the "P" (physician) userLevel can access login(), logout(), addPatient(),
               removePatient(), addPatientVitals(), addPatientRecords(), addPatientXrays(), retrievePatientVitals(),
@@ -54,6 +53,9 @@ function login(){
     if (userDB[userName] != null && userDB[userName].PASSWORD == password){
         currentUser = userName;
         loggedIn = true;
+        // Reset the login boxes
+        document.getElementById("userName").value = "";
+        document.getElementById("password").value = "";
     }
     else{
         alert("The user \"" + String(userName) +
@@ -94,7 +96,7 @@ function addUser(){
     var ul = String(userLevel);
     // Check input to make sure the userLevel is correct
     if (ul != "P" && ul != "N"){
-        alert("The provided user level was invalid (can only be \"P\"\"N\")");
+        alert("The provided user level was invalid (can only be \"P\" or \"N\")");
         return;
     }
     // Add all information to the userDB stored under the new user's userName
@@ -214,6 +216,11 @@ function addPatientVitals(){
         // Convert database to a JSON and store in localStorage
         var JSONDB = JSON.stringify(patientDB);
         localStorage.setItem("localPatientDB", JSONDB);
+        document.getElementById("ECG").value = "";
+        document.getElementById("SpO2").value = "";
+        document.getElementById("CO2").value = "";
+        document.getElementById("BP").value = "";
+        document.getElementById("P").value = "";
     }
     else{
         alert("The patientName \"" + String(patientName) +
@@ -237,13 +244,18 @@ function addPatientRecords(){
     }
     // Get all required elements
     var patientName = document.getElementById("recordsPatientName").value;
-    var records = document.getElementById("addRecords").value;
+    var recordName = document.getElementById("recordName").value;
+    var recordDate = document.getElementById("recordDate").value;
+    var recordToAdd = document.getElementById("recordToAdd").value;
     if (patientDB[patientName] != null){
         // Add records to the patientDB stored under the new patient's userName
-        patientDB[patientName].RECORDS = {records};
+        patientDB[patientName].RECORDS[recordName] = {RECORD:recordToAdd, DATE:recordDate};
         // Convert database to a JSON and store in localStorage
         var JSONDB = JSON.stringify(patientDB);
         localStorage.setItem("localPatientDB", JSONDB);
+        document.getElementById("recordName").value = "";
+        document.getElementById("recordDate").value = "";
+        document.getElementById("recordToAdd").value = "";
     }
     else{
         alert("The patientName \"" + String(patientName) +
@@ -274,6 +286,7 @@ function addPatientXrays(){
         // Convert database to a JSON and store in localStorage
         var JSONDB = JSON.stringify(patientDB);
         localStorage.setItem("localPatientDB", JSONDB);
+        document.getElementById("addXrays").value = "";
     }
     else{
         alert("The patientName \"" + String(patientName) +
@@ -299,9 +312,13 @@ function retrievePatientVitals(){
     var JSONDB = localStorage.getItem("localPatientDB");
     var JSDB = JSON.parse(JSONDB);
     var patientName = document.getElementById("vitalsPatientName").value;
-    if (JSDB[patientName] != null){
+    if (JSDB == null){
+        alert("The patient database has nothing in it");
+    }
+    else if (JSDB[patientName] != null){
         // Retrieve all vital information from the patientDB stored under the patient's patientName
         document.getElementById("retrieveVitals").value = JSDB[patientName].VITALS;
+        document.getElementById("vitalsPatientName").value = "";
     }
     else{
         alert("The patientName \"" + String(patientName) +
@@ -332,7 +349,18 @@ function retrievePatientRecords(){
     }
     else if (JSDB[patientName] != null){
         // Retrieve all medical records from the patientDB stored under the patient's patientName
-        document.getElementById("retrieveRecords").value = JSDB[patientName].RECORDS;
+        //var myObject = JSON.stringify(JSDB[patientName].RECORDS);
+        //var myObject = JSON.stringify(JSDB);
+        document.getElementById("retrieveRecords").innerHTML = "";
+        for (var key in JSDB[patientName].RECORDS){
+            if (JSDB[patientName].RECORDS.hasOwnProperty(key)) {
+                document.getElementById("retrieveRecords").innerHTML += "Record Name: " + String(key) + "<br>";
+                document.getElementById("retrieveRecords").innerHTML += "Record Date: " + String(JSDB[patientName].RECORDS[key].DATE) + "<br>";
+                document.getElementById("retrieveRecords").innerHTML += "Record Notes: " + String(JSDB[patientName].RECORDS[key].RECORD) + "<br><br><br>";
+            }
+        }
+        //document.getElementById("retrieveRecords").innerHTML;
+        document.getElementById("recordsPatientName").value = "";
     }
     else{
         alert("The patientName \"" + String(patientName) +
@@ -357,9 +385,13 @@ function retrievePatientXrays(){
     var JSONDB = localStorage.getItem("localPatientDB");
     var JSDB = JSON.parse(JSONDB);
     var patientName = document.getElementById("xraysPatientName").value;
-    if (JSDB[patientName] != null){
+    if (JSDB == null){
+        alert("The patient database has nothing in it");
+    }
+    else if (JSDB[patientName] != null){
         // Retrieve all x-ray information from the patientDB stored under the patient's patientName
         document.getElementById("retrieveXrays").value = JSDB[patientName].XRAYS;
+        document.getElementById("xraysPatientName").value = "";
     }
     else{
         alert("The patientName \"" + String(patientName) +
@@ -387,8 +419,11 @@ function removePatientVitals(){
     var patientName = document.getElementById("vitalsPatientName").value;
     var JSONDB = localStorage.getItem("localPatientDB");
     var JSDB = JSON.parse(JSONDB);
+    if (JSDB == null){
+        alert("The patient database has nothing in it");
+    }
     // Remove vitals information from patient's database entry
-    if(JSDB[patientName] != null && JSDB[patientName].VITALS != null){
+    else if(JSDB[patientName] != null && JSDB[patientName].VITALS != null){
         //delete JSDB[userName].VITALS;
         JSDB[userName].VITALS = {};
         JSONDB = JSON.stringify(JSDB);
@@ -418,8 +453,11 @@ function removePatientRecords(){
     var patientName = document.getElementById("recordsPatientName").value;
     var JSONDB = localStorage.getItem("localPatientDB");
     var JSDB = JSON.parse(JSONDB);
+    if (JSDB == null){
+        alert("The patient database has nothing in it");
+    }
     // Remove records from patient's database entry
-    if(JSDB[patientName] != null && JSDB[patientName].RECORDS != null){
+    else if(JSDB[patientName] != null && JSDB[patientName].RECORDS != null){
         //delete JSDB[userName].RECORDS;
         JSDB[patientName].RECORDS = {};
         JSONDB = JSON.stringify(JSDB);
@@ -449,8 +487,11 @@ function removePatientXrays(){
     var patientName = document.getElementById("xraysPatientName").value;
     var JSONDB = localStorage.getItem("localPatientDB");
     var JSDB = JSON.parse(JSONDB);
+    if (JSDB == null){
+        alert("The patient database has nothing in it");
+    }
     // Remove x-ray information from patient's database entry
-    if(JSDB[patientName] != null && JSDB[patientName].RECORDS != null){
+    else if(JSDB[patientName] != null && JSDB[patientName].RECORDS != null){
         //delete JSDB[userName].XRAYS;
         JSDB[userName].XRAYS = {};
         JSONDB = JSON.stringify(JSDB);
