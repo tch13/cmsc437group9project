@@ -41,10 +41,10 @@
                     <a class="nav-link" href="loginPage.html" id="nBar">LOGIN</a>
                   </li>
                 <li class="nav-item">
-                  <a class="nav-link active" href="vitals.htm" id="nBar">VITALS</a>
+                  <a class="nav-link" href="vitals.htm" id="nBar">VITALS</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="records.html" id="nBar">RECORDS</a>
+                  <a class="nav-link active" href="records.html" id="nBar">RECORDS</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="xrays.html" id="nBar">X-RAYS</a>
@@ -57,60 +57,65 @@
         </nav>
         
         <h1> PATIENT RECORDS </h1>
-        <br><br><br>
+        <br><br>
         <div class="container">
-            <!-- Temporary login method -->
-            <div class="row" >
-                <div class="col-sm-4">UserName:
-                    <input type="text" id="userName">
-                </div>
-                <div class="col-sm-4">Password:
-                    <input type="text" id="password">
-                </div>
-                <div class="col-sm-4">
-                    <button onclick="login()">Login</button>
-                </div>
-                <p id="loginWM"></p>
-            </div>
-            <br><br>
-            <div class="row" >
-                <div class="col-sm-6">UserLevel:
-                    <input type="text" id="userLevel">
+            <!-- Record functions -->
+            <div class="row">
+                <div class="col-sm-6">
+                    <form>
+                        <div class="form-group">
+                            Patient Name (First Last):<br>
+                            <input type="text" class="form-control form-control-sm" id="recordsPatientFN" placeholder="John Smith">
+                        </div>
+                        <div class="form-group">
+                            Patient Date of Birth (MM/DD/YYYY):<br>
+                            <input type="text" class="form-control form-control-sm" id="recordsPatientDOB" placeholder="04/01/1985">
+                        </div>
+                    </form>
                 </div>
                 <div class="col-sm-6">
-                    <button onclick="addUser()">Add User</button>
+                    <form>
+                        <div class="form-group">
+                            Record Name:<br>
+                            <input type="text" class="form-control form-control-sm" id="recordName">
+                        </div>
+                        <div class="form-group">
+                            Record Date:<br>
+                            <input type="text" class="form-control form-control-sm" id="recordDate">
+                        </div>
+                    </form>
                 </div>
-                <p id="addUserWM"></p>
             </div>
-            <br><br>
-            <div class="row" >
-                <div class="col">PatientName:
-                    <input type="text" id="patientName">
-                    <button onclick="addPatient()">Add Patient</button>
+            <div class="row">
+                <div class="col">
+                    <form>
+                        <div class="form-group">
+                            Record:<br>
+                            <textarea id="recordToAdd" class="form-control form-control-sm" rows="5"></textarea>
+                            <!-- <input type="text" class="form-control form-control-sm" id="recordToAdd"> -->
+                        </div>
+                    </form>
                 </div>
-                <p id="addUserWM"></p>
             </div>
-            <br><br>
-            <!-- Record functions -->
-            <div class="row" >
-                <div class="col-sm-2">PatientName:
-                    <input type="text" id="recordsPatientName">
+            <div class="row">
+                <div class="col-lg-4">
+                    <button onclick="retrievePatientRecords()" style="display: block; width: 100%">
+                        Retrieve Records for This Patient
+                    </button>
                 </div>
-                <div class="col-sm-2">
-                    <button onclick="retrievePatientRecords()">Search Database</button>
+                <div class="col-lg-4">
+                    <button onclick="addPatientRecords()" style="display: block; width: 100%">
+                        Add Record for This Patient
+                    </button>
                 </div>
-                <div class="col-sm-6">Record name:
-                    <input type="text" id="recordName">Date:
-                    <input type="text" id="recordDate">Record:
-                    <input type="text" id="recordToAdd">
-                    <button onclick="addPatientRecords()">Add Record</button>
+                <div class="col-lg-4">
+                    <button onclick="removePatientRecords()" style="display: block; width: 100%">
+                        Remove This Patient's Records
+                    </button>
                 </div>
-                <div class="col-sm-2">
-                    <button onclick="removePatientRecords()">Remove All Records</button>
-                </div>
-                <p id="retrievePatientRecordsWM"></p>
             </div>
-            <br><br>
+            <br><hr>
+            <h3><i>RETRIEVED RECORDS</i></h3><hr>
             <div class="row">
                 <div class="col">
                     <p id="retrieveRecords"></p>
