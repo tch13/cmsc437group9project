@@ -194,7 +194,7 @@ function removePatient(){
     var JSONDB = localStorage.getItem("localPatientDB");
     var JSDB = JSON.parse(JSONDB);
     if(JSDB[patientName] != null){
-        delete JSDB[userName];
+        delete JSDB[patientName];
         JSONDB = JSON.stringify(JSDB);
         localStorage.setItem("localPatientDB", JSONDB);
         document.getElementById("patientFN").value = "";
