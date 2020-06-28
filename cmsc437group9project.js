@@ -76,6 +76,7 @@ function logout(){
     localStorage.setItem("currentUser",  "");
     localStorage.setItem("currentUserLevel", "");
     localStorage.setItem("loggedIn", "false");
+    alert("Logout Successful");
 }
 
 function addUser(){
