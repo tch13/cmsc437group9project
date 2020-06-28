@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>VITALS</title>
+        <style>
+            body{
+                background-color: black;
+            }
+            #nBar{
+                background-color: black;
+            }
+
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+            }   
+        </style>
+
+        
+        
+    
+
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        
+        <!-- Our main JavaScript and CSS files -->
+        <link rel="stylesheet" href="cmsc437group9project.css">
+        <script src="cmsc437group9project.js"></script>
+    </head>
+    <body style="background-color: black;">
+
+        <nav class="navbar navbar-expand-sm navbar-dark" id="nBar">
+            <!--navbar-toggler defines the styles for the button-->
+            <!--data-toggle="collapse" defines the behavior of button-->
+            <!--#collapsibleNavbar specifies the element that expands/collapses-->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <!--"collapse" means once loaded should be collapsed-->
+            <!--"navbar-collapse" says to render when is expanded-->
+            <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                <!--"navbar-nav" removes the bullets from list items-->
+              <ul class="navbar-nav">
+                <li class="nav-item" >
+                    <a class="nav-link" href="loginPage.html" id="nBar">LOGIN</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link active" href="vitals.htm" id="nBar">VITALS</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#" id="nBar">RECORDS</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#" id="nBar">X-RAYS</a>
+                </li>    
+                <li class="nav-item">
+                    <a class="nav-link" href="#" id="nBar">CONTROLS</a>
+                  </li>   
+              </ul>
+            </div>  
+        </nav>
+        
+        
+        
+        <br><br>
+        <div class="container">
+
+            <div class="row " >
+                <div class="col-sm-4 justify-content-center text-center">
+                    <label style="color:lime;"><b>PATIENT NAME: </b></label> <br>
+                    <input type="text" id="patientName"  class="filling">
+                </div>
+                <div class="col-sm-4 text-center">
+                    <label style="color: yellow;"><b>SpO2:</b></label> <br>
+                    <input type="text" id="SpO2"  class="filling">
+                </div>
+                <div class="col-sm-4 text-center">
+                    <label style="color: red;"><b>BP:</b></label> <br>
+                    <input type="text" id="BP"  class="filling">
+                </div>
+            </div>
+            <br>
+
+            <div class="row justify-content-center" >
+                <div class="col-sm-4 text-center">
+                    <label style="color: blue;"><b>P:</b></label> <br>
+                    <input type="text" id="P"  class="filling">
+                </div>
+                <div class="col-sm-4 text-center">
+                    <label style="color: orange;"><b>CO2:</b></label> <br>
+                    <input type="text" id="CO2"  class="filling">
+                </div>
+                
+                <div class="col-sm-4 align-items-center text-center">
+                    <label style="color: green; text-align: center;"><b>ECG:</b></label> <br>
+                    <input type="text" id="ECG"  class="filling">
+                </div>
+            </div>
+        </div>
+        
+        <div><img src="ECG.gif" alt="UMBC logo" width="300" height="300" class="center"></div>
+        
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4 " id="inputs">
+                    <p class="button-area"><button id="submit_button" onclick="addPatientVitals()" style="display:block; width: 100%;">Add</button></p>
+                </div>
+                <div class="col-sm-4" id="inputs">
+                    <p class="button-area"><button id="submit_button" onclick="removePatientVitals()" style="display:block; width: 100%;">Remove</button></p>
+                </div>
+                <div class="col-sm-4" id="inputs">
+                    <p class="button-area"><button id="submit_button" onclick="retrievePatientVitals()" style="display:block; width: 100%;">Retrieve</button></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        
+        <br><br>
+            
+        <p style="color: lime;"><b>RETRIEVED VITALS: [ECG, SPo2, CO2, BP, P]:</b></p>
+        <p id="retrieveVitals" style="color:lime"></p>
+        
+        <div id="warningMessage"></div>
+    </body>
+</html>
