@@ -84,7 +84,7 @@
                 </div>
             </form>
             <div class="btn-block">
-                <button type="button" class="btn btn-primary onclick="addPatient()">Add Patient</button>
+                <button type="button" class="btn btn-primary" onclick="addPatient()">Add Patient</button>
                 <button type="button" class="btn btn-danger" onclick="removePatient()">Remove Patient</button>
             </div>
         </div>
@@ -101,7 +101,7 @@
                   </div>
                   <div class="form-group"> 
                       <label for="addOrRemovePassword">Password</label>
-                      <input type="password" class="form-control form-control-sm" id="addOrRemoveUserName">
+                      <input type="password" class="form-control form-control-sm" id="addOrRemovePassword">
                   </div>
                   <div class="form-group"> 
                     <label for="addOrRemoveUserLevel">User Level ('S', 'P', or 'N')</label>
@@ -119,6 +119,14 @@
             <button type="button" class="btn btn-danger" onclick="clearEntireDB()">Clear Entire Database</button>
         </div>
         <div class="col-sm-1"></div>
-    </div>                         
+    </div>
+    <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4 text-center">
+            <hr>
+            <button type="button" class="btn btn-secondary" onclick="logout()">Log Out</button>
+        </div>
+        <div class="col-sm-4"></div>
+    </div>
     <script src="cmsc437group9project.js"></script>
 </body>
