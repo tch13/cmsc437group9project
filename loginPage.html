@@ -38,16 +38,16 @@
             <!--"navbar-nav" removes the bullets from list items-->
           <ul class="navbar-nav">
             <li class="nav-item" >
-                <a class="nav-link active" href="#" id="nBar">LOGIN</a>
+                <a class="nav-link active" href="loginPage.html" id="nBar">LOGIN</a>
               </li>
             <li class="nav-item">
               <a class="nav-link" href="vitals.htm" id="nBar">VITALS</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#" id="nBar">RECORDS</a>
+              <a class="nav-link" href="records.html" id="nBar">RECORDS</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#" id="nBar">X-RAYS</a>
+              <a class="nav-link" href="xrays.html" id="nBar">X-RAYS</a>
             </li>    
             <li class="nav-item">
                 <a class="nav-link" href="controlsPage.html" id="nBar">CONTROLS</a>
@@ -61,31 +61,31 @@
             <form>
                 <h6> Existing User Login </h6>
                 <div class="form-group">
-                    <label for="currentUserName">Username</label>
-                    <input type="text" class="form-control form-control-sm" id="currentUserName">
+                    <label for="userName">Username</label>
+                    <input type="text" class="form-control form-control-sm" id="userName">
                 </div>
                 <div class="form-group"> 
-                    <label for="currentUserPassword">Password</label>
-                    <input type="password" class="form-control form-control-sm" id="currentUserPassword">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control form-control-sm" id="password">
                 </div>
             </form>
-            <button type="button" class="btn btn-primary">Log in</button>
+            <button type="button" class="btn btn-primary" onclick="login()">Log in</button>
         </div>
         <div class="col-sm-5" style="border: 2px solid black;">
             <form>
                 <h6> Add/Remove Patients</h6>
                 <div class="form-group">
-                    <label for="newPatientName">Patient Name</label>
-                    <input type="text" class="form-control form-control-sm" id="newPatientName" placeholder="John Smith">
+                    <label for="patientFN">Patient Name</label>
+                    <input type="text" class="form-control form-control-sm" id="patientFN" placeholder="John Smith">
                 </div>
                 <div class="form-group"> 
-                    <label for="newUserPassword">Patient Birthdate (MM/DD/YYYY)</label>
-                    <input type="text" class="form-control form-control-sm" id="newUserPassword" placeholder="04/01/1985">
+                    <label for="patientDOB">Patient Birthdate (MM/DD/YYYY)</label>
+                    <input type="text" class="form-control form-control-sm" id="patientDOB" placeholder="04/01/1985">
                 </div>
             </form>
             <div class="btn-block">
-                <button type="button" class="btn btn-primary">Add Patient</button>
-                <button type="button" class="btn btn-danger">Remove Patient</button>
+                <button type="button" class="btn btn-primary onclick="addPatient()">Add Patient</button>
+                <button type="button" class="btn btn-danger" onclick="removePatient()">Remove Patient</button>
             </div>
         </div>
         <div class="col-sm-1"></div>
@@ -96,21 +96,21 @@
             <form>
                 <h6> Add/Remove Users <span style="color:red">(SUPERUSER ONLY)</span></h6>
                 <div class="form-group">
-                    <label for="newUserName">Username</label>
-                    <input type="text" class="form-control form-control-sm" id="newUserName">
+                    <label for="addOrRemoveUserName">Username</label>
+                    <input type="text" class="form-control form-control-sm" id="addOrRemoveUserName">
                   </div>
                   <div class="form-group"> 
-                      <label for="newUserPassword">Password</label>
-                      <input type="password" class="form-control form-control-sm" id="newUserPassword">
+                      <label for="addOrRemovePassword">Password</label>
+                      <input type="password" class="form-control form-control-sm" id="addOrRemoveUserName">
                   </div>
                   <div class="form-group"> 
-                    <label for="newUserLevel">User Level ('S', 'P', or 'N')</label>
-                    <input type="password" class="form-control form-control-sm" id="newUserLevel">
+                    <label for="addOrRemoveUserLevel">User Level ('S', 'P', or 'N')</label>
+                    <input type="text" class="form-control form-control-sm" id="addOrRemoveUserLevel">
                 </div>
             </form>
             <div class="btn-block">
-                <button type="button" class="btn btn-primary">Add User</button>
-                <button type="button" class="btn btn-danger">Remove User</button>
+                <button type="button" class="btn btn-primary" onclick="addUser()">Add User</button>
+                <button type="button" class="btn btn-danger" onclick="removeUser()">Remove User</button>
             </div>
         </div>
         <div class="col-sm-5" style="border: 2px solid black;">
@@ -119,5 +119,6 @@
             <button type="button" class="btn btn-danger">Clear Entire Database</button>
         </div>
         <div class="col-sm-1"></div>
-    </div>
+    </div>                         
+    <script src="cmsc437group9project.js"></script>
 </body>
