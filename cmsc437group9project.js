@@ -51,8 +51,9 @@ function login(){
     var userName = document.getElementById("userName").value;
     var password = document.getElementById("password").value;
     if (userDB[userName] != null && userDB[userName].PASSWORD == password){
-        currentUser = userName;
-        loggedIn = true;
+        localStorage.setItem("loggedIn", "true");
+        localStorage.setItem("currentUser", userName);
+        localStorage.setItem("currentUserLevel", userDB[userName].USERLEVEL);
         // Reset the login boxes
         document.getElementById("userName").value = "";
         document.getElementById("password").value = "";
@@ -68,17 +69,17 @@ function login(){
 // by taking the user back to the login screen
 function logout(){
     // If user is not logged in, give error and return
-    if (loggedIn == false) {
+    if ( localStorage.getItem("loggedIn") != "true") {
         alert("You are currently not logged in, please do so before performing any further actions");
         return;
     }
-    currentUser = "";
-    loggedIn = false;
+    localStorage.setItem("currentUser",  "");
+    localStorage.setItem("loggedIn", "false");
 }
 
 function addUser(){
     // If user is not logged in, give error and return
-    if (loggedIn == false) {
+    if ( localStorage.getItem("loggedIn") != "true") {
         alert("You are currently not logged in, please do so before performing any further actions");
         return;
     }
@@ -111,7 +112,7 @@ function addUser(){
 
 function removeUser(){
     // If user is not logged in, give error and return
-    if (loggedIn == false) {
+    if ( localStorage.getItem("loggedIn") != "true") {
         alert("You are currently not logged in, please do so before performing any further actions");
         return;
     }
@@ -143,7 +144,7 @@ function removeUser(){
 
 function addPatient(){
     // If user is not logged in, give error and return
-    if (loggedIn == false) {
+    if ( localStorage.getItem("loggedIn") != "true") {
         alert("You are currently not logged in, please do so before performing any further actions");
         return;
     }
@@ -170,17 +171,22 @@ function addPatient(){
 
 function removePatient(){
     // If user is not logged in, give error and return
-    if (loggedIn == false) {
+    if ( localStorage.getItem("loggedIn") != "true") {
         alert("You are currently not logged in, please do so before performing any further actions");
         return;
     }
+           
+           
+     
     // If the user is not a physician or a nurse, give a warning and don't remove patient
     if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "N" &&
-    userDB[currentUser].USERLEVEL != "S"){
+    userDB[currentUser].USERLEVEL != "S"){ 
         alert("The current user \"" + currentUser +
         "\" is not of a valid P or N-tier authorization level for this action");
         return;
     }
+    
+ 
     // Get all necessary elements
     // NOTE: patientName should be of the form FirstName LastName BirthDate
     var patientFN = document.getElementById("patientFN").value;
@@ -206,7 +212,7 @@ function removePatient(){
 // For Tommy to implement
 function addPatientVitals(){
     // If user is not logged in, give error and return
-    if (loggedIn == false) {
+    if (localStorage.getItem("loggedIn") != "true") {
         alert("You are currently not logged in, please do so before performing any further actions");
         return;
     }
@@ -249,7 +255,7 @@ function addPatientVitals(){
 
 function addPatientRecords(){
     // If user is not logged in, give error and return
-    if (loggedIn == false) {
+    if( localStorage.getItem("loggedIn") != "true") {
         alert("You are currently not logged in, please do so before performing any further actions");
         return;
     }
@@ -287,7 +293,7 @@ function addPatientRecords(){
 
 function addPatientXrays(){
     // If user is not logged in, give error and return
-    if (loggedIn == false) {
+    if ( localStorage.getItem("loggedIn") != "true") {
         alert("You are currently not logged in, please do so before performing any further actions");
         return;
     }
@@ -321,7 +327,7 @@ function addPatientXrays(){
 
 function retrievePatientVitals(){
     // If user is not logged in, give error and return
-    if (loggedIn == false) {
+    if (localStorage.getItem("loggedIn") != "true") {
         alert("You are currently not logged in, please do so before performing any further actions");
         return;
     }
@@ -357,7 +363,7 @@ function retrievePatientVitals(){
 
 function retrievePatientRecords(){
     // If user is not logged in, give error and return
-    if (loggedIn == false) {
+    if (localStorage.getItem("loggedIn") != "true") {
         alert("You are currently not logged in, please do so before performing any further actions");
         return;
     }
@@ -439,7 +445,7 @@ function retrievePatientXrays(){
 // For Tommy to implement
 function removePatientVitals(){
     // If user is not logged in, give error and return
-    if (loggedIn == false) {
+    if (localStorage.getItem("loggedIn") != "true") {
         alert("You are currently not logged in, please do so before performing any further actions");
         return;
     }
@@ -477,7 +483,7 @@ function removePatientVitals(){
 
 function removePatientRecords(){
     // If user is not logged in, give error and return
-    if (loggedIn == false) {
+    if ( localStorage.getItem("loggedIn") != "true") {
         alert("You are currently not logged in, please do so before performing any further actions");
         return;
     }
@@ -552,17 +558,19 @@ function removePatientXrays(){
 // For Evan to implement
 function changeVentilatorSettings(){
     // If user is not logged in, give error and return
-    if (loggedIn == false) {
+    if ( localStorage.getItem("loggedIn") != "true") {
         alert("You are currently not logged in, please do so before performing any further actions");
-        return;
+        return false;
     }
     // If the user is not a physician or a nurse, give a warning and don't change settings
     if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "N" &&
     userDB[currentUser].USERLEVEL != "S"){
         alert("The current user \"" + currentUser +
         "\" is not of a valid P or N-tier authorization level for this action");
-        return;
+        return false;
     }
+           
+    return true;
 }
 
 // For Evan to implement
@@ -583,7 +591,7 @@ function changeInfusionPumpSettings(){
 
 function clearEntireDB(){
     // If user is not logged in, give error and return
-    if (loggedIn == false) {
+    if (localStorage.getItem("loggedIn") != "true") {
         alert("You are currently not logged in, please do so before performing any further actions");
         return;
     }
