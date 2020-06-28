@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang = en>
+<head>
+    </style>
+    <meta charset="utf-8">   
+    <meta name="viewport" content="width=device-width, initial-scale=1">   
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">   
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>  
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> 
+    <script src="https://g200kg.github.io/input-knobs/input-knobs.js"></script>
+
+    <style>
+        img {
+            padding-bottom:0.5%;
+            margin-left:5px;
+
+        }
+
+        #jane {
+            display:none;
+        }
+
+        #lamar {
+            display:none;
+        }
+
+        #jimi {
+            display:none;
+        }
+
+        .btn {
+            margin-bottom:5px;
+        }
+
+        .col-sm-4 {
+            border-style: dashed;
+            border-color: black;
+            border-width: 0px 2px 0px 0px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm navbar-dark" id="nBar" style="background-color: black;">
+        <!--navbar-toggler defines the styles for the button-->
+        <!--data-toggle="collapse" defines the behavior of button-->
+        <!--#collapsibleNavbar specifies the element that expands/collapses-->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <!--"collapse" means once loaded should be collapsed-->
+        <!--"navbar-collapse" says to render when is expanded-->
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <!--"navbar-nav" removes the bullets from list items-->
+          <ul class="navbar-nav">
+            <li class="nav-item" >
+                <a class="nav-link" href="loginPage.html" id="nBar">LOGIN</a>
+              </li>
+            <li class="nav-item">
+              <a class="nav-link" href="vitals.htm" id="nBar">VITALS</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="records.html" id="nBar">RECORDS</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="xrays.html" id="nBar">X-RAYS</a>
+            </li>    
+            <li class="nav-item">
+                <a class="nav-link" href="controlsPage.html" id="nBar">CONTROLS</a>
+              </li>   
+          </ul>
+        </div>  
+    </nav>
+
+    <div class="row">
+        <div class="col-lg-3">
+            <h1 style="padding:0.5%;"> PATIENT X-RAYS </h1>
+            <div class="dropdown" style="padding:1.5%;">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Select a patient to view their X-rays &ensp;
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#" id="A">Doe, Jane A.</a>
+                <a class="dropdown-item" href="#" id="B">Jackson, Lamar D.</a>
+                <a class="dropdown-item" href="#" id="C">Hendrix, James M.</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#" id="CLOSE">Hide current X-rays</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-1"></div>
+        <div class="col-lg-8" style="padding:0.5%">
+            <h4 id="currPatient"> &ensp; (No patient selected)</h4>
+            <hr>
+            <div id="jane">
+                <img src="xray1.jpg">
+            </div>
+
+            <div id="lamar">
+                <img src="xray2.jpg">
+                <img src="xray3.jpg" width="450" height="350">
+            </div>
+
+            <div id="jimi">
+                <img src="xray4.jpg" width="400" height="300">
+                <img src="xray5.jpg" width="400" height="300">
+                <img src="xray6.jpg" width="400" height="300">
+            </div>
+        
+        </div>
+    </div>
+
+    <script>
+        $("#A").click(function() {
+            $("#currPatient").html("&ensp; Currently viewing X-rays for: Doe, Jane A.")
+            $("#lamar").css("display", "none");
+            $("#jimi").css("display", "none");
+            $("#jane").css("display", "block");
+        });  
+
+        $("#B").click(function() {
+            $("#currPatient").html("&ensp; Currently viewing X-rays for: Jackson, Lamar D.")
+            $("#lamar").css("display", "block");
+            $("#jimi").css("display", "none");
+            $("#jane").css("display", "none");
+        });  
+
+        $("#C").click(function() {
+            $("#currPatient").html("&ensp; Currently viewing X-rays for: Hendrix, James M.")
+            $("#lamar").css("display", "none");
+            $("#jimi").css("display", "block");
+            $("#jane").css("display", "none");
+        }); 
+        
+        $("#CLOSE").click(function() {
+            $("#currPatient").html("&ensp; (No patient selected)")
+            $("#lamar").css("display", "none");
+            $("#jimi").css("display", "none");
+            $("#jane").css("display", "none");
+        });
+    </script>
+
+
+</body>
