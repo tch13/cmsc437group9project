@@ -74,6 +74,7 @@ function logout(){
         return;
     }
     localStorage.setItem("currentUser",  "");
+    localStorage.setItem("currentUserLevel", "");
     localStorage.setItem("loggedIn", "false");
 }
 
@@ -84,7 +85,7 @@ function addUser(){
         return;
     }
     // If the user is not a super user, give a warning and don't remove user
-    if (userDB[currentUser].USERLEVEL != "S"){
+    if ( localStorage.getItem("currentUserLevel") != "S"){
         alert("The current user \"" + currentUser +
         "\" is not of a valid S-tier authorization level for this action; " +
         "Please login using the super user first (username:admin, password:password)");
@@ -117,7 +118,7 @@ function removeUser(){
         return;
     }
     // If the user is not a super user, give a warning and don't remove user
-    if (userDB[currentUser].USERLEVEL != "S"){
+    if (localStorage.getItem("currentUserLevel") != "S"){
         alert("The current user \"" + currentUser +
         "\" is not of a valid S-tier authorization level for this action; " +
         "Please login using the super user first (username:admin, password:password)");
@@ -148,9 +149,10 @@ function addPatient(){
         alert("You are currently not logged in, please do so before performing any further actions");
         return;
     }
+    
+    var ul = localStorage.getItem("currentUserLevel");
     // If the user is not a physician or a nurse, give a warning and don't add patient
-    if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "N" &&
-    userDB[currentUser].USERLEVEL != "S"){
+    if (ul != "P" && ul != "N" && ul != "S"){
         alert("The current user \"" + currentUser +
         "\" is not of a valid P or N-tier authorization level for this action");
         return;
@@ -175,18 +177,15 @@ function removePatient(){
         alert("You are currently not logged in, please do so before performing any further actions");
         return;
     }
-           
-           
-     
-    // If the user is not a physician or a nurse, give a warning and don't remove patient
-    if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "N" &&
-    userDB[currentUser].USERLEVEL != "S"){ 
+              
+    var ul = localStorage.getItem("currentUserLevel");
+    // If the user is not a physician or a nurse, give a warning and don't add patient
+    if (ul != "P" && ul != "N" && ul != "S"){
         alert("The current user \"" + currentUser +
         "\" is not of a valid P or N-tier authorization level for this action");
         return;
     }
     
- 
     // Get all necessary elements
     // NOTE: patientName should be of the form FirstName LastName BirthDate
     var patientFN = document.getElementById("patientFN").value;
@@ -217,12 +216,14 @@ function addPatientVitals(){
         return;
     }
     // If the user is not a physician or a nurse, give a warning and don't add patient vitals
-    if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "N" &&
-    userDB[currentUser].USERLEVEL != "S"){
+    var ul = localStorage.getItem("currentUserLevel");
+
+    if (ul != "P" && ul != "N" && ul != "S"){
         alert("The current user \"" + currentUser +
         "\" is not of a valid P or N-tier authorization level for this action");
         return;
     }
+           
     // Get all necessary elements
     // NOTE: patientName should be of the form FirstName LastName BirthDate
     var patientFN = document.getElementById("vitalsPatientFN").value;
@@ -260,9 +261,11 @@ function addPatientRecords(){
         return;
     }
     // If the user is not a physician, give a warning and don't add patient record
-    if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "S"){
+    var ul = localStorage.getItem("currentUserLevel");
+
+    if (ul != "P" && ul != "S"){
         alert("The current user \"" + currentUser +
-        "\" is not of a valid P-tier authorization level for this action");
+        "\" is not of a valid P or N-tier authorization level for this action");
         return;
     }
     // Get all necessary elements
@@ -332,8 +335,9 @@ function retrievePatientVitals(){
         return;
     }
     // If the user is not a physician or a nurse, give a warning and don't retrieve patient vitals
-    if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "N" &&
-    userDB[currentUser].USERLEVEL != "S"){
+    var ul = localStorage.getItem("currentUserLevel");
+
+    if (ul != "P" && ul != "S"){
         alert("The current user \"" + currentUser +
         "\" is not of a valid P or N-tier authorization level for this action");
         return;
@@ -368,12 +372,14 @@ function retrievePatientRecords(){
         return;
     }
     // If the user is not a physician or a nurse, give a warning and don't retrieve patient records
-    if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "N" &&
-    userDB[currentUser].USERLEVEL != "S"){
+    var ul = localStorage.getItem("currentUserLevel");
+
+    if (ul != "P" && ul != "N" && ul != "S"){
         alert("The current user \"" + currentUser +
         "\" is not of a valid P or N-tier authorization level for this action");
         return;
     }
+           
     var JSONDB = localStorage.getItem("localPatientDB");
     var JSDB = JSON.parse(JSONDB);
     // Get all necessary elements
@@ -413,8 +419,9 @@ function retrievePatientXrays(){
         alert("You are currently not logged in, please do so before performing any further actions");
         return;
     }
-    // If the user is not a physician, give a warning and don't retrieve patient x-rays
-    if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "S"){
+    var ul = localStorage.getItem("currentUserLevel");
+    // If the user is not a physician or a nurse, give a warning and don't add patient
+    if (ul != "P" && ul != "S"){
         alert("The current user \"" + currentUser +
         "\" is not of a valid P-tier authorization level for this action");
         return;
@@ -450,8 +457,9 @@ function removePatientVitals(){
         return;
     }
     // If the user is not a physician or a nurse, give a warning and don't remove patient vitals
-    if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "N" &&
-    userDB[currentUser].USERLEVEL != "S"){
+    var ul = localStorage.getItem("currentUserLevel");
+
+    if (ul != "P" && ul != "N" && ul != "S"){
         alert("The current user \"" + currentUser +
         "\" is not of a valid P or N-tier authorization level for this action");
         return;
@@ -488,9 +496,11 @@ function removePatientRecords(){
         return;
     }
     // If the user is not a physician, give a warning and don't remove patient records
-    if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "S"){
+    var ul = localStorage.getItem("currentUserLevel");
+
+    if (ul != "P" && ul != "S"){
         alert("The current user \"" + currentUser +
-        "\" is not of a valid P-tier authorization level for this action");
+        "\" is not of a valid P or N-tier authorization level for this action");
         return;
     }
     // Get all necessary elements
@@ -563,13 +573,13 @@ function changeVentilatorSettings(){
         return false;
     }
     // If the user is not a physician or a nurse, give a warning and don't change settings
-    if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "N" &&
-    userDB[currentUser].USERLEVEL != "S"){
+    var ul = localStorage.getItem("currentUserLevel");
+    // If the user is not a physician or a nurse, give a warning and don't add patient
+    if (ul != "P" && ul != "N" && ul != "S"){
         alert("The current user \"" + currentUser +
         "\" is not of a valid P or N-tier authorization level for this action");
         return false;
     }
-           
     return true;
 }
 
@@ -596,10 +606,10 @@ function clearEntireDB(){
         return;
     }
     // If the user is not a super user, give a warning and don't clear DB
-    if (userDB[currentUser].USERLEVEL != "S"){
+    var ul = localStorage.getItem("currentUserLevel");
+    if (ul != "S"){
         alert("The current user \"" + currentUser +
-        "\" is not of a valid S-tier authorization level for this action; " +
-        "Please login using the super user first (username:admin, password:password)");
+        "\" is not of a valid P or N-tier authorization level for this action");
         return;
     }
     localStorage.clear();
