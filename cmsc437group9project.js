@@ -3,7 +3,7 @@
 Functions: login(), logout(), addUser(), removeUser(), addPatient(), removePatient(), addPatientVitals(),
            addPatientRecords(), addPatientXrays(), retrievePatientVitals(), retrievePatientRecords(),
            retrievePatientXrays(), removePatientRecords(), removePatientVitals(), removePatientXrays(),
-           changeVentilatorSettings(), changeInfusionPumpSettings(), clearEntireDB()
+           changeVentilatorSettings(), changeInfusionPumpSettings(), clearEntireDB(), checkXrayAuthorization()
 
 Access notes: "S": Users identified with the "S" (super) userLevel will be able to access all functions
 
@@ -15,20 +15,6 @@ Access notes: "S": Users identified with the "S" (super) userLevel will be able 
               "N": Users identified with the "N" (nurse) userLevel can access login(), logout(), addPatient(),
               removePatient(), addPatientVitals(), retrievePatientVitals(), retrievePatientRecords(),
               removePatientVitals(), changeVentilatorSettings(), and changeInfusionPumpSettings() functions
-
-Key HTML IDs: "userName": User's username to uniquely identify their system account
-              "patientName": Patient's name in the format FirstNameLastNameBirthDate
-                    - Example: John Smith was born on August 10th, 2001. His patientName is JohnSmith08102001
-              "password": The user's password to their account
-              "userLevel": User's level of authority ("S", "P", "N")
-              "ECG", "SpO2", "CO2", "BP", "P": Different variables for the different vital signs to be added
-              "addRecords": Records to be added
-              "addXrays": X-rays to be added
-              "retrieveVitals": A variable to which the retrieved vital signs can be printed (may need to be
-                    separated into the different vital categories)
-              "retrieveRecords": A variable to which the retrieved records can be printed
-              "retrieveXrays": A variable to which the retrieved X-rays can be printed (might need to be
-                    implemented differently due to the visual aspect of X-rays themselves)
 
 */
 // Database of patients
@@ -171,7 +157,6 @@ function addPatient(){
         alert("You are currently not logged in, please do so before performing any further actions");
         return;
     }
-    
     var ul = localStorage.getItem("currentUserLevel");
     // If the user is not a physician or a nurse, give a warning and don't add patient
     if (ul != "P" && ul != "N" && ul != "S"){
@@ -205,9 +190,9 @@ function removePatient(){
               
     var ul = localStorage.getItem("currentUserLevel");
     // If the user is not a physician or a nurse, give a warning and don't add patient
-    if (ul != "P" && ul != "N" && ul != "S"){
+    if (ul != "P" && ul != "S"){
         alert("The current user \"" + currentUser +
-        "\" is not of a valid P or N-tier authorization level for this action");
+        "\" is not of a valid P-tier authorization level for this action");
         return;
     }
     // Update local databases as necessary
@@ -296,7 +281,7 @@ function addPatientRecords(){
 
     if (ul != "P" && ul != "S"){
         alert("The current user \"" + currentUser +
-        "\" is not of a valid P or N-tier authorization level for this action");
+        "\" is not of a valid P-tier authorization level for this action");
         return;
     }
     // Update local databases as necessary
@@ -334,10 +319,10 @@ function addPatientXrays(){
         alert("You are currently not logged in, please do so before performing any further actions");
         return;
     }
-    // If the user is not a physician, give a warning and don't add patient x-ray
-    if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "S"){
-        alert("The current user \"" + currentUser +
-        "\" is not of a valid P-tier authorization level for this action");
+    // If the user is not a physician, give a warning and return
+    var ul = localStorage.getItem("currentUserLevel");
+    if (ul != "P" && ul != "S"){
+        alert("The current user is not of a valid P-tier authorization level for this action");
         return;
     }
     // Update local databases as necessary
@@ -348,14 +333,16 @@ function addPatientXrays(){
     var patientFN = document.getElementById("xraysPatientFN").value;
     var patientDOB = document.getElementById("xraysPatientDOB").value;
     var patientName = String(patientFN) + " " + String(patientDOB);
-    var xrays = document.getElementById("addXrays").value;
+    var xrayDate = document.getElementById("xrayDate").value;
+    var xrayInfo = document.getElementById("xrayInfo").value;
     if (patientDB[patientName] != null){
         // Add all x-ray information to the patientDB stored under the new patient's userName
-        patientDB[patientName].XRAYS = {xrays};
+        patientDB[patientName].XRAYS[xrayDate] = {INFO:xrayInfo};
         // Convert database to a JSON and store in localStorage
         var JSONDB = JSON.stringify(patientDB);
         localStorage.setItem("localPatientDB", JSONDB);
-        document.getElementById("addXrays").value = "";
+        document.getElementById("xrayDate").value = "";
+        document.getElementById("xrayInfo").value = "";
     }
     else{
         alert("The patientName \"" + String(patientName) +
@@ -403,7 +390,7 @@ function retrievePatientVitals(){
                 document.getElementById("retrieveVitals").innerHTML += "Vitals Info: [ECG = " +
                 String(JSDB[patientName].VITALS[key].ECG) + ", SpO2 = " + String(JSDB[patientName].VITALS[key].SpO2) +
                 ", CO2 = " + String(JSDB[patientName].VITALS[key].CO2) + ", BP = " + String(JSDB[patientName].VITALS[key].BP) +
-                ", P = " + String(JSDB[patientName].VITALS[key].P) + "]" + "<br><br>";
+                ", P = " + String(JSDB[patientName].VITALS[key].P) + "]" + "<br><br><br>";
             }
         }
     }
@@ -466,15 +453,14 @@ function retrievePatientRecords(){
 
 function retrievePatientXrays(){
     // If user is not logged in, give error and return
-    if (loggedIn == false) {
+    if ( localStorage.getItem("loggedIn") != "true") {
         alert("You are currently not logged in, please do so before performing any further actions");
         return;
     }
+    // If the user is not a physician, give a warning and return
     var ul = localStorage.getItem("currentUserLevel");
-    // If the user is not a physician or a nurse, give a warning and don't add patient
     if (ul != "P" && ul != "S"){
-        alert("The current user \"" + currentUser +
-        "\" is not of a valid P-tier authorization level for this action");
+        alert("The current user is not of a valid P-tier authorization level for this action");
         return;
     }
     // Update local databases as necessary
@@ -493,7 +479,13 @@ function retrievePatientXrays(){
     }
     else if (JSDB[patientName] != null){
         // Retrieve all x-ray information from the patientDB stored under the patient's patientName
-        document.getElementById("retrieveXrays").value = JSDB[patientName].XRAYS;
+        document.getElementById("retrieveXrays").innerHTML = "";
+        for (var key in JSDB[patientName].XRAYS){
+            if (JSDB[patientName].XRAYS.hasOwnProperty(key)) {
+                document.getElementById("retrieveXrays").innerHTML += "X-ray Date: " + String(key) + "<br>";
+                document.getElementById("retrieveXrays").innerHTML += "X-ray Information: " + String(JSDB[patientName].XRAYS[key].INFO) + "<br><br><br>";
+            }
+        }
         document.getElementById("xraysPatientName").value = "";
     }
     else{
@@ -558,7 +550,7 @@ function removePatientRecords(){
 
     if (ul != "P" && ul != "S"){
         alert("The current user \"" + currentUser +
-        "\" is not of a valid P or N-tier authorization level for this action");
+        "\" is not of a valid P-tier authorization level for this action");
         return;
     }
     // Update local databases as necessary
@@ -591,14 +583,14 @@ function removePatientRecords(){
 
 function removePatientXrays(){
     // If user is not logged in, give error and return
-    if (loggedIn == false) {
+    if ( localStorage.getItem("loggedIn") != "true") {
         alert("You are currently not logged in, please do so before performing any further actions");
         return;
     }
-    // If the user is not a physician, give a warning and don't remove patient x-rays
-    if (userDB[currentUser].USERLEVEL != "P" && userDB[currentUser].USERLEVEL != "S"){
-        alert("The current user \"" + currentUser +
-        "\" is not of a valid P-tier authorization level for this action");
+    // If the user is not a physician, give a warning and return
+    var ul = localStorage.getItem("currentUserLevel");
+    if (ul != "P" && ul != "S"){
+        alert("The current user is not of a valid P-tier authorization level for this action");
         return;
     }
     // Update local databases as necessary
@@ -615,9 +607,9 @@ function removePatientXrays(){
         alert("The patient database has nothing in it");
     }
     // Remove x-ray information from patient's database entry
-    else if(JSDB[patientName] != null && JSDB[patientName].RECORDS != null){
+    else if(JSDB[patientName] != null && JSDB[patientName].XRAYS != null){
         //delete JSDB[userName].XRAYS;
-        JSDB[userName].XRAYS = {};
+        JSDB[patientName].XRAYS = {};
         JSONDB = JSON.stringify(JSDB);
         localStorage.setItem("localPatientDB", JSONDB);
     }
@@ -626,6 +618,31 @@ function removePatientXrays(){
         "\" does not exist or was misspelled\n\n" +
         "Note: The patientName must be of the form FirstName LastName BirthDate, " +
         "for example; John Smith 09/24/1995");
+    }
+}
+
+function checkXrayAuthorization(){
+    // If user is not logged in, give error and return
+    if ( localStorage.getItem("loggedIn") != "true") {
+        alert("You are currently not logged in, please do so before performing any further actions");
+        return;
+    }
+    // If the user is not a physician, give a warning and return
+    var ul = localStorage.getItem("currentUserLevel");
+    if (ul != "P" && ul != "S"){
+        alert("The current user is not of a valid P-tier authorization level for this action");
+        return;
+    }
+    if (localStorage.getItem("hrefLocation") == null){
+        localStorage.setItem("hrefLocation", "1");
+    }
+    if (localStorage.getItem("hrefLocation") == "1") {
+        document.location='xrays.html';
+        localStorage.setItem("hrefLocation", "2");
+    }
+    else if (localStorage.getItem("hrefLocation") == "2"){
+        document.location='xraysARD.html';
+        localStorage.setItem("hrefLocation", "1");
     }
 }
 

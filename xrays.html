@@ -65,7 +65,7 @@
               <a class="nav-link" href="records.html" id="nBar">RECORDS</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" href="xrays.html" id="nBar">X-RAYS</a>
+              <a class="nav-link active" href="xraysARD.html" id="nBar">X-RAYS</a>
             </li>    
             <li class="nav-item">
                 <a class="nav-link" href="controlsPage.html" id="nBar">CONTROLS</a>
@@ -77,6 +77,11 @@
     <div class="row">
         <div class="col-lg-3">
             <h1 style="padding:0.5%;"> PATIENT X-RAYS </h1>
+            <div style="padding: 1.5%;">
+                <button class="btn btn-warning" onclick="checkXrayAuthorization()">
+                    Add, Retrieve, or Delete X-ray Information
+                </button>
+            </div>
             <div class="dropdown" style="padding:1.5%;">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Select a patient to view their X-rays &ensp;
@@ -141,6 +146,6 @@
             $("#jane").css("display", "none");
         });
     </script>
-
+    <script src="cmsc437group9project.js"></script>
 
 </body>

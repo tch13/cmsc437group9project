@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang = en>
+<head>
+    </style>
+    <meta charset="utf-8">   
+    <meta name="viewport" content="width=device-width, initial-scale=1">   
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">   
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>  
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> 
+    <script src="https://g200kg.github.io/input-knobs/input-knobs.js"></script>
+
+    <style>
+        img {
+            padding-bottom:0.5%;
+            margin-left:5px;
+
+        }
+
+        #name {
+            display:none;
+        }
+
+        #dob {
+            display:none;
+        }
+
+        #date {
+            display:none;
+        }
+
+        #info {
+            display: none;
+        }
+
+        #add, #retrieve, #delete, #retrieveText {
+            display: none;
+        }
+
+        .btn {
+            margin-bottom:5px;
+        }
+
+        .smPad {
+            padding-top: 2%;
+        }
+
+        .col-sm-4 {
+            border-style: dashed;
+            border-color: black;
+            border-width: 0px 2px 0px 0px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm navbar-dark" id="nBar" style="background-color: black;">
+        <!--navbar-toggler defines the styles for the button-->
+        <!--data-toggle="collapse" defines the behavior of button-->
+        <!--#collapsibleNavbar specifies the element that expands/collapses-->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <!--"collapse" means once loaded should be collapsed-->
+        <!--"navbar-collapse" says to render when is expanded-->
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <!--"navbar-nav" removes the bullets from list items-->
+          <ul class="navbar-nav">
+            <li class="nav-item" >
+                <a class="nav-link" href="loginPage.html" id="nBar">LOGIN</a>
+              </li>
+            <li class="nav-item">
+              <a class="nav-link" href="vitals(updated 2).htm" id="nBar">VITALS</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="records.html" id="nBar">RECORDS</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="xraysARD.html" id="nBar">X-RAYS</a>
+            </li>    
+            <li class="nav-item">
+                <a class="nav-link" href="controlsPage.html" id="nBar">CONTROLS</a>
+              </li>   
+          </ul>
+        </div>  
+    </nav>
+
+    <div class="row">
+        <div class="col-lg-3">
+            <h1 style="padding:0.5%;"> PATIENT X-RAYS </h1>
+            <div style="padding: 1.5%;">
+                <button class="btn btn-primary" onclick="checkXrayAuthorization()">
+                    View Available X-ray Imagery
+                </button>
+            </div>
+            <div class="dropdown" style="padding:1.5%;">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Select an X-ray information functionality &ensp;
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#" id="A">Add X-ray Data</a>
+                <a class="dropdown-item" href="#" id="B">Retrieve X-ray Data</a>
+                <a class="dropdown-item" href="#" id="C">Delete All X-ray Data</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#" id="CLOSE">Hide current functionalities</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-1"></div>
+        <div class="col-lg-8" style="padding:0.5%">
+            <h4 id="currPatient"> &ensp; (No patient selected)</h4>
+            <hr>
+            <div id="name" class="smPad">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label>Patient Name:</label>
+                        </div>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control form-control-sm" id="xraysPatientFN" placeholder="John Smith">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="dob" class="smPad">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label>Patient DOB:</label>
+                        </div>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control form-control-sm" id="xraysPatientDOB" placeholder="MM/DD/YYYY">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="date" class="smPad">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label>X-ray Date Taken:</label>
+                        </div>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control form-control-sm" id="xrayDate" placeholder="MM/DD/YYYY">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="info" class="smPad">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label>X-ray Information:</label>
+                        </div>
+                        <div class="col-sm-9">
+                            <textarea name="xrayInfo" class="form-control form-control-sm" id="xrayInfo" rows="5"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="add" class="smPad">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-3"></div>
+                        <div class="col-lg-6">
+                            <button class="btn btn-warning form-control form-control-sm" onclick="addPatientXrays()">ADD</button>
+                        </div>
+                        <div class="col-sm-3"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="retrieve" class="smPad">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-3"></div>
+                        <div class="col-lg-6">
+                            <button class="btn btn-primary form-control form-control-sm" onclick="retrievePatientXrays()">RETRIEVE</button>
+                        </div>
+                        <div class="col-sm-3"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="delete" class="smPad">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-3"></div>
+                        <div class="col-lg-6">
+                            <button class="btn btn-danger form-control form-control-sm" onclick="removePatientXrays()">DELETE</button>
+                        </div>
+                        <div class="col-sm-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" id="retrieveText">
+        <div class="col">
+            <div style="padding: 1.5%;">
+                <hr><b><i>Retrieved X-ray Information</i></b><hr>
+                <br><p id="retrieveXrays"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $("#A").click(function() {
+            $("#currPatient").html("&ensp; Adding X-ray Data")
+            $("#name").css("display", "block"); $("#dob").css("display", "block");
+            $("#date").css("display", "block"); $("#info").css("display", "block");
+            $("#add").css("display", "block"); $("#retrieve").css("display", "none");
+            $("#delete").css("display", "none"); $("#retrieveText").css("display", "none");
+        });  
+
+        $("#B").click(function() {
+            $("#currPatient").html("&ensp; Retrieving X-ray Data")
+            $("#name").css("display", "block"); $("#dob").css("display", "block");
+            $("#date").css("display", "none"); $("#info").css("display", "none");
+            $("#add").css("display", "none"); $("#retrieve").css("display", "block");
+            $("#delete").css("display", "none"); $("#retrieveText").css("display", "block");
+        });  
+
+        $("#C").click(function() {
+            $("#currPatient").html("&ensp; Deleting X-ray Data")
+            $("#name").css("display", "block"); $("#dob").css("display", "block");
+            $("#date").css("display", "none"); $("#info").css("display", "none");
+            $("#add").css("display", "none"); $("#retrieve").css("display", "none");
+            $("#delete").css("display", "block"); $("#retrieveText").css("display", "none");
+        }); 
+        
+        $("#CLOSE").click(function() {
+            $("#currPatient").html("&ensp; No action selected")
+            $("#name").css("display", "none"); $("#dob").css("display", "none");
+            $("#date").css("display", "none"); $("#info").css("display", "none");
+            $("#add").css("display", "none"); $("#retrieve").css("display", "none");
+            $("#delete").css("display", "none"); $("#retrieveText").css("display", "none");
+        });
+    </script>
+    <script src="cmsc437group9project.js"></script>
+</body>
