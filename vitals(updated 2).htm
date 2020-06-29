@@ -67,18 +67,31 @@
             </div>  
         </nav>
         
-        <label style="color: lime; text-align: center;"><b>Date of Birth:</b></label> 
-        <input type="text" id="vitalsPatientDOB"  class="filling">
-        <label style="color: lime; text-align: center;"><b>Current Date:</b></label> 
-        <input type="text" id="vitalsPatientDate"  class="filling">
-        
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-2">
+                    <label style="color: lime; text-align: center;"><b>Patient Date of Birth:</b></label>
+                </div>
+                <div class="col-sm-1">
+                    <input type="text" id="vitalsPatientDOB"  class="filling" placeholder="MM/DD/YYYY"><br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    <label style="color: lime; text-align: center;"><b>Current Date:</b></label>
+                </div>
+                <div class="col-sm-1">
+                    <input type="text" id="vitalsDate"  class="filling" placeholder="MM/DD/YYYY">
+                </div>
+            </div>
+        </div>
         <br><br>
         <div class="container">
 
             <div class="row " >
                 <div class="col-sm-4 justify-content-center text-center">
                     <label style="color:lime;"><b>PATIENT NAME: </b></label> <br>
-                    <input type="text" id="vitalsPatientFN"  class="filling">
+                    <input type="text" id="vitalsPatientFN"  class="filling" placeholder="John Smith">
                 </div>
                 <div class="col-sm-4 text-center">
                     <label style="color: yellow;"><b>SpO2:</b></label> <br>
@@ -126,11 +139,10 @@
     </div>
 
         
-        <br><br>
+        <hr style="color: gray;">
             
-        <p style="color: lime;"><b>RETRIEVED VITALS: [ECG, SPo2, CO2, BP, P]:</b></p>
-        <p id="retrieveVitals" style="color:lime"></p>
-        
-        <div id="warningMessage"></div>
+        <p style="color: lime;"><b><i>RETRIEVED VITALS: [ECG, SpO2, CO2, BP, P]:</i></b></p>
+        <hr style="color: gray;">
+        <p id="retrieveVitals" style="color:white"></p>
     </body>
 </html>

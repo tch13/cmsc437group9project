@@ -258,6 +258,7 @@ function addPatientVitals(){
     var patientFN = document.getElementById("vitalsPatientFN").value;
     var patientDOB = document.getElementById("vitalsPatientDOB").value;
     var patientName = String(patientFN) + " " + String(patientDOB);
+    var vitalsDate = document.getElementById("vitalsDate").value;
     var ECG = document.getElementById("ECG").value;
     var SpO2 = document.getElementById("SpO2").value;
     var CO2 = document.getElementById("CO2").value;
@@ -265,7 +266,7 @@ function addPatientVitals(){
     var P = document.getElementById("P").value;
     if (patientDB[patientName] != null){
         // Add all vitals information to the patientDB stored under the new patient's userName
-        patientDB[patientName].VITALS = {ECG, SpO2, CO2, BP, P};
+        patientDB[patientName].VITALS[vitalsDate] = {ECG, SpO2, CO2, BP, P};
         // Convert database to a JSON and store in localStorage
         var JSONDB = JSON.stringify(patientDB);
         localStorage.setItem("localPatientDB", JSONDB);
@@ -274,6 +275,7 @@ function addPatientVitals(){
         document.getElementById("CO2").value = "";
         document.getElementById("BP").value = "";
         document.getElementById("P").value = "";
+        document.getElementById("vitalsDate").value = "";
     }
     else{
         alert("The patientName \"" + String(patientName) +
@@ -393,8 +395,17 @@ function retrievePatientVitals(){
     }
     else if (JSDB[patientName] != null){
         // Retrieve all vital information from the patientDB stored under the patient's patientName
-        document.getElementById("retrieveVitals").value = JSDB[patientName].VITALS;
-        document.getElementById("vitalsPatientName").value = "";
+        document.getElementById("retrieveVitals").innerHTML = "";
+        for (var key in JSDB[patientName].VITALS){
+            if (JSDB[patientName].VITALS.hasOwnProperty(key)) {
+                // [ECG, SpO2, CO2, BP, P]
+                document.getElementById("retrieveVitals").innerHTML += "Vitals Date: " + String(key) + "<br>";
+                document.getElementById("retrieveVitals").innerHTML += "Vitals Info: [ECG = " +
+                String(JSDB[patientName].VITALS[key].ECG) + ", SpO2 = " + String(JSDB[patientName].VITALS[key].SpO2) +
+                ", CO2 = " + String(JSDB[patientName].VITALS[key].CO2) + ", BP = " + String(JSDB[patientName].VITALS[key].BP) +
+                ", P = " + String(JSDB[patientName].VITALS[key].P) + "]" + "<br><br>";
+            }
+        }
     }
     else{
         alert("The patientName \"" + String(patientName) +
@@ -524,7 +535,7 @@ function removePatientVitals(){
     // Remove vitals information from patient's database entry
     else if(JSDB[patientName] != null && JSDB[patientName].VITALS != null){
         //delete JSDB[userName].VITALS;
-        JSDB[userName].VITALS = {};
+        JSDB[patientName].VITALS = {};
         JSONDB = JSON.stringify(JSDB);
         localStorage.setItem("localPatientDB", JSONDB);
     }
