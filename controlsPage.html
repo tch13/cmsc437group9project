@@ -9,7 +9,7 @@
         #settings {
             display:none;
         }
-
+ 
         #btnBox {
             display:block;
             padding:10%;
@@ -24,8 +24,39 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>  
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> 
     <script src="https://g200kg.github.io/input-knobs/input-knobs.js"></script>
+
 </head>
 <body>
+    <nav class="navbar navbar-expand-sm navbar-dark" id="nBar" style="background-color: black;">
+        <!--navbar-toggler defines the styles for the button-->
+        <!--data-toggle="collapse" defines the behavior of button-->
+        <!--#collapsibleNavbar specifies the element that expands/collapses-->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <!--"collapse" means once loaded should be collapsed-->
+        <!--"navbar-collapse" says to render when is expanded-->
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <!--"navbar-nav" removes the bullets from list items-->
+          <ul class="navbar-nav">
+            <li class="nav-item" >
+                <a class="nav-link" href="loginPage.html" id="nBar">LOGIN</a>
+              </li>
+            <li class="nav-item">
+              <a class="nav-link" href="vitals(updated 2).htm" id="nBar">VITALS</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="records.html" id="nBar">RECORDS</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="xrays.html" id="nBar">X-RAYS</a>
+            </li>    
+            <li class="nav-item">
+                <a class="nav-link active" href="controlsPage.html" id="nBar">CONTROLS</a>
+              </li>   
+          </ul>
+        </div>  
+    </nav>
     <div id=btnBox>
         <button type="button" class="btn btn-secondary" id="startBtn"> Change Medical Device Settings </button>
         <p style="color:red; font-size:1.5em;"> NOTE: Device settings may ONLY be changed by physicians!</p>
@@ -73,8 +104,11 @@
     </div>
     <script>
         $("#startBtn").click(function() {
-            $("#btnBox").css("display", "none");
-            $("#settings").css("display", "flex");
+            var i = changeDeviceSettings();
+            if(i == true){
+                $("#btnBox").css("display", "none");
+                $("#settings").css("display", "flex");
+            }
         });  
 
         $("#setBtn").click(function() {
@@ -166,5 +200,6 @@
         });
 
     </script>
+    <script src="cmsc437group9project.js"></script>
 </body>
 </html>
