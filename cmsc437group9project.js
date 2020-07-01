@@ -647,7 +647,7 @@ function checkXrayAuthorization(){
 }
 
 // For Evan to implement
-function changeVentilatorSettings(){
+function changeDeviceSettings(){
     // If user is not logged in, give error and return
     if ( localStorage.getItem("loggedIn") != "true") {
         alert("You are currently not logged in, please do so before performing any further actions");
@@ -658,29 +658,9 @@ function changeVentilatorSettings(){
     patientDB = JSON.parse(localStorage.getItem("localPatientDB"));
     // If the user is not a physician or a nurse, give a warning and don't change settings
     var ul = localStorage.getItem("currentUserLevel");
-    if (ul != "P" && ul != "N" && ul != "S"){
+    if (ul != "P" && ul != "S"){
         alert("The current user \"" + currentUser +
-        "\" is not of a valid P or N-tier authorization level for this action");
-        return false;
-    }
-    return true;
-}
-
-// For Evan to implement
-function changeInfusionPumpSettings(){
-    // If user is not logged in, give error and return
-    if (loggedIn == false) {
-        alert("You are currently not logged in, please do so before performing any further actions");
-        return false;
-    }
-    // Update local variables as necessary
-    userDB = JSON.parse(localStorage.getItem("localUserDB"));
-    patientDB = JSON.parse(localStorage.getItem("localPatientDB"));
-    // If the user is not a physician or a nurse, give a warning and don't change settings
-    var ul = localStorage.getItem("currentUserLevel");
-    if (ul != "P" && ul != "N" && ul != "S"){
-        alert("The current user \"" + currentUser +
-        "\" is not of a valid P or N-tier authorization level for this action");
+        "\" is not of a valid P-tier authorization level for this action");
         return false;
     }
     return true;
