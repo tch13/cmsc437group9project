@@ -46,6 +46,7 @@ function login(){
     var JSONDB = localStorage.getItem("localUserDB");
     var JSDB = JSON.parse(JSONDB);
     
+    // authenticate the login
     if (JSDB[userName] != null && JSDB[userName].PASSWORD == password){
         localStorage.setItem("loggedIn", "true");
         localStorage.setItem("currentUser", userName);
